@@ -19,6 +19,7 @@ private GeoPoint touchedPoint;
 private MapView map;
 public Context context;
 private SimpleItemizedOverlay buildingBalloon;
+private boolean balloonExists;//tracks wheter or not a balloon has been created
 Drawable buildingMarker;
 List<Overlay> mapOverlayList;
 
@@ -26,6 +27,7 @@ public CustomTouchInputOverlay (MapView _map){
 	map=_map;
 	context=_map.getContext();
 	mapOverlayList = _map.getOverlays();
+	balloonExists=false;
 }
 	public boolean onTouchEvent(MotionEvent e, MapView m) {
 		//if the map moves, don't place marks
@@ -46,17 +48,26 @@ public CustomTouchInputOverlay (MapView _map){
 		if (e.getAction() == MotionEvent.ACTION_UP && !moved) {
 			stop = e.getEventTime();
 			moved = false;
+			if(balloonExists)
+			{
+				buildingBalloon.hideBalloon();
+				mapOverlayList.remove(buildingBalloon);
+				balloonExists=false;
+			}
 		}
 		//If the press was long enough, show balloon
 		if (stop - start > 150) {
-		GeoPoint point = new GeoPoint(4631543,-74094501);
+		balloonExists = true;	
+		//GeoPoint point = new GeoPoint(4631543,-74094501);
 		buildingMarker = context.getResources().getDrawable(R.drawable.marker);
 		buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map);
-		OverlayItem overlayItem = new OverlayItem(point, "Edificio 411", 
+		buildingBalloon.setShowClose(false);
+		OverlayItem overlayItem = new OverlayItem(touchedPoint, "Edificio 411", 
 				"Laboratorios de Ingenieria");
 		buildingBalloon.addOverlay(overlayItem);
 		mapOverlayList.add(buildingBalloon);
 		buildingBalloon.setFocus(overlayItem);
+		return true;
 		}
 
 		return false;
