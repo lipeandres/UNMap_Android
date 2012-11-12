@@ -16,9 +16,9 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> m_overlays = new ArrayList<OverlayItem>();
 	private Context c;
 	
-	public SimpleItemizedOverlay(Drawable defaultMarker, MapView mapView) {
-		super(boundCenter(defaultMarker), mapView);
-		c = mapView.getContext();
+	public SimpleItemizedOverlay(Drawable defaultMarker, MapView map) {
+		super(boundCenter(defaultMarker), map);
+		c = map.getContext();
 	}
 
 	public void addOverlay(OverlayItem overlay) {

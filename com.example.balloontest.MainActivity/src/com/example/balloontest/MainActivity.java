@@ -36,7 +36,7 @@ public class MainActivity extends MapActivity implements LocationListener{
 	GeoPoint boundRectBottomRight;
 	CustomTouchInputOverlay touchOverlay;
 	MyLocationOverlay userPositionOverlay;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
