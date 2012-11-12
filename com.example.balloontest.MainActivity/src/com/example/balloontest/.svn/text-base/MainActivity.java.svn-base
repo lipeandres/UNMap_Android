@@ -42,7 +42,7 @@ public class MainActivity extends MapActivity implements LocationListener{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_main);
 		// Assigning map to layout
 		unMap = (MapView) findViewById(R.id.mapViewMain);
 		// Obtain the existing (default) map overlays
