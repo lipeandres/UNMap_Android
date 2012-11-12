@@ -1,10 +1,11 @@
 package com.example.balloontest;
-
+//hola
 import java.util.List;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -13,6 +14,7 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class MainActivity extends MapActivity {
 
@@ -30,8 +32,10 @@ public class MainActivity extends MapActivity {
 	Bitmap buildingsImage;
 	protected GeoPoint baseLocation;
 	MapController unMapController;
-	GeoPoint topLeft;
-	GeoPoint bottomRight;
+	GeoPoint boundRectTopLeft;
+	GeoPoint boundRectBottomRight;
+	Drawable buildingMarker;
+	SimpleItemizedOverlay balloonOverlay;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,13 +66,29 @@ public class MainActivity extends MapActivity {
 		// corner of the desired containing rectangle area,
 		// since this overlay is not intended to change its position static
 		// points are sent
-		topLeft = new GeoPoint(UN_RECT_BOUNDING_W,UN_RECT_BOUNDING_N);
-		bottomRight = new GeoPoint(UN_RECT_BOUNDING_E,UN_RECT_BOUNDING_S);
-		buildingsOverlay = new BitmapOverlay(buildingsImage, topLeft,
-				bottomRight);
+		boundRectTopLeft = new GeoPoint(UN_RECT_BOUNDING_W,UN_RECT_BOUNDING_N);
+		boundRectBottomRight = new GeoPoint(UN_RECT_BOUNDING_E,UN_RECT_BOUNDING_S);
+		buildingsOverlay = new BitmapOverlay(buildingsImage, boundRectTopLeft,
+				boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
-
+		
+		//--Using the balloon overlay
+		// first overlay
+		buildingMarker = getResources().getDrawable(R.drawable.marker);
+		balloonOverlay = new SimpleItemizedOverlay(buildingMarker, unMap);
+		
+		GeoPoint point = new GeoPoint(UN_CENTER_LATITUDE,UN_CENTER_LONGITUDE);
+		OverlayItem overlayItem = new OverlayItem(point, "Edificio 411", 
+				"Laboratorios de Ingenieria");
+		balloonOverlay.addOverlay(overlayItem);
+		
+		GeoPoint point2 = new GeoPoint(UN_CENTER_LATITUDE+20,UN_CENTER_LONGITUDE-20);
+		OverlayItem overlayItem2 = new OverlayItem(point2, "Edificio 411", 
+				"Quien sabe q habra por aca");		
+		balloonOverlay.addOverlay(overlayItem2);		
+		unMapOverlayList.add(balloonOverlay);
+		
 	}
 
 	@Override
