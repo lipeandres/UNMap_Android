@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -15,7 +17,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class MainActivity extends MapActivity {
+public class MainActivity extends MapActivity implements LocationListener{
 
 	public static final int UN_CENTER_LATITUDE = 4636761;
 	public static final int UN_CENTER_LONGITUDE = -74083450;
@@ -35,6 +37,7 @@ public class MainActivity extends MapActivity {
 	GeoPoint boundRectBottomRight;
 	Drawable buildingMarker;
 	SimpleItemizedOverlay balloonOverlay;
+	CustomTouchInputOverlay touchOverlay;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,10 @@ public class MainActivity extends MapActivity {
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
 		
+		//Test input overlay
+		touchOverlay = new CustomTouchInputOverlay(unMap);
+		unMapOverlayList.add(touchOverlay);
+		
 		//--Using the balloon overlay
 		// first overlay
 		buildingMarker = getResources().getDrawable(R.drawable.marker);
@@ -100,6 +107,26 @@ public class MainActivity extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void onLocationChanged(Location arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProviderDisabled(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProviderEnabled(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
