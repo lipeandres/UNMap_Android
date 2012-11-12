@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="android.R"/>
+<fullyQualifiedTypeName name="android.R.drawable"/>
+<fullyQualifiedTypeName name="com.readystatesoftware.maps.TapControlledMapView"/>
+<fullyQualifiedTypeName name="com.example.mapstest.R.id"/>
+<fullyQualifiedTypeName name="com.example.mapstest.SimpleItemizedOverlay"/>
+<fullyQualifiedTypeName name="com.google.android.maps.MapView"/>
+<fullyQualifiedTypeName name="com.google.android.maps.Overlay"/>
+<fullyQualifiedTypeName name="com.example.balloontest.BitmapOverlay"/>
+<fullyQualifiedTypeName name="android.graphics.BitmapFactory"/>
+<fullyQualifiedTypeName name="com.example.balloontest.R.id"/>
+<fullyQualifiedTypeName name="com.example.balloontest.R.drawable"/>
+<fullyQualifiedTypeName name="com.google.android.maps.GeoPoint"/>
+</qualifiedTypeNameHistroy>
