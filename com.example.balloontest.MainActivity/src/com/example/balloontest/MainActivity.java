@@ -14,6 +14,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
@@ -35,9 +36,8 @@ public class MainActivity extends MapActivity implements LocationListener{
 	MapController unMapController;
 	GeoPoint boundRectTopLeft;
 	GeoPoint boundRectBottomRight;
-	Drawable buildingMarker;
-	SimpleItemizedOverlay balloonOverlay;
 	CustomTouchInputOverlay touchOverlay;
+	MyLocationOverlay userPositionOverlay;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class MainActivity extends MapActivity implements LocationListener{
 		unMap = (MapView) findViewById(R.id.mapViewMain);
 		// Obtain the existing (default) map overlays
 		unMapOverlayList = unMap.getOverlays();
+		unMap.setBuiltInZoomControls(true);
 
 		// --Setting up the map
 		// Set the center and zoom of the map to show the complete extension of
@@ -79,22 +80,9 @@ public class MainActivity extends MapActivity implements LocationListener{
 		touchOverlay = new CustomTouchInputOverlay(unMap);
 		unMapOverlayList.add(touchOverlay);
 		
-		//--Using the balloon overlay
-		// first overlay
-		buildingMarker = getResources().getDrawable(R.drawable.marker);
-		balloonOverlay = new SimpleItemizedOverlay(buildingMarker, unMap);
-		
-		GeoPoint point = new GeoPoint(UN_CENTER_LATITUDE,UN_CENTER_LONGITUDE);
-		OverlayItem overlayItem = new OverlayItem(point, "Edificio 411", 
-				"Laboratorios de Ingenieria");
-		balloonOverlay.addOverlay(overlayItem);
-		
-		GeoPoint point2 = new GeoPoint(UN_CENTER_LATITUDE+20,UN_CENTER_LONGITUDE-20);
-		OverlayItem overlayItem2 = new OverlayItem(point2, "Edificio 411", 
-				"Quien sabe q habra por aca");		
-		balloonOverlay.addOverlay(overlayItem2);		
-		unMapOverlayList.add(balloonOverlay);
-		
+		//Create user location tracking overlay
+		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
+		unMapOverlayList.add(userPositionOverlay);
 	}
 
 	@Override
@@ -128,5 +116,20 @@ public class MainActivity extends MapActivity implements LocationListener{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		userPositionOverlay.disableMyLocation();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		userPositionOverlay.enableMyLocation();
+	}
+	
 
 }
