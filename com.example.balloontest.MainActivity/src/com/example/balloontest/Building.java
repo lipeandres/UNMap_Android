@@ -1,15 +1,28 @@
 package com.example.balloontest;
 
+import android.database.Cursor;
+
 //Se importo este y no el SQL
 
 public class Building {
 	
-	String number;
-	int longitud;
-	int latitud;
-	String name;
+	private String name;
+	private String number;
+	private Integer longitud;
+	private Integer latitud;
 	
 	
+	public Building(String name, String number, Integer longitud, Integer latitud) {
+		super();
+		this.name=name;
+		this.number=number;
+		this.longitud=longitud;
+		this.latitud=latitud;
+		}
+	
+	public Building() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public String getName() {
 	return name;
@@ -24,13 +37,5 @@ public class Building {
 	public int getLatitud() {
 		return latitud;
 		}
-	
-	public Building(String _name,String _number, int _longitud, int _latitud) {
-	number = _number;
-	name = _name;
-	longitud = _longitud;
-	latitud = _latitud;
-	}
-	
 
 }
