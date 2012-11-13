@@ -5,8 +5,6 @@ import java.util.List;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
