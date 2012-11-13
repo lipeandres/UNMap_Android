@@ -74,7 +74,7 @@ public class SavedDBAdapter {
 	}
 
 	// Insert a new task
-	public long insertItem(Building _saved) {
+	public long insertItem(BuildingItem _saved) {
 		// Create a new row of values to insert.
 		ContentValues newSavedValues = new ContentValues();
 		// Assign values for each row.
@@ -118,7 +118,7 @@ public class SavedDBAdapter {
 	}
 
 	//Retorna un SavedItem
-	public Building getSavedItem(long _rowIndex) throws SQLException {
+	public BuildingItem getSavedItem(long _rowIndex) throws SQLException {
 		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,KEY_NAME,
 				KEY_NUMBER, KEY_LONGITUD }, KEY_ID + "=" + _rowIndex, null, null, null, null,
 				null);
@@ -130,7 +130,7 @@ public class SavedDBAdapter {
 		int longitud = cursor.getInt(cursor.getColumnIndex(KEY_LONGITUD));
 		int latitud = cursor.getInt(cursor.getColumnIndex(KEY_LATITUD));
 		//long created = cursor.getLong(cursor.getColumnIndex(KEY_CREATION_DATE));
-		Building result = new Building(name,number, longitud, latitud);
+		BuildingItem result = new BuildingItem(name,number, longitud, latitud);
 		return result;
 	}
 	
