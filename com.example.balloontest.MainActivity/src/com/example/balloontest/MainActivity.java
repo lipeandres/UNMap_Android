@@ -1,4 +1,5 @@
 package com.example.balloontest;
+
 import java.util.List;
 
 import android.content.res.Resources;
@@ -8,6 +9,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -16,7 +19,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
-public class MainActivity extends MapActivity implements LocationListener{
+public class MainActivity extends MapActivity implements LocationListener {
 
 	public static final int UN_CENTER_LATITUDE = 4636761;
 	public static final int UN_CENTER_LONGITUDE = -74083450;
@@ -36,7 +39,10 @@ public class MainActivity extends MapActivity implements LocationListener{
 	GeoPoint boundRectBottomRight;
 	CustomTouchInputOverlay touchOverlay;
 	MyLocationOverlay userPositionOverlay;
-	
+	int buttonView = Menu.FIRST;
+	int buttonShow = Menu.FIRST + 1;
+	private int group1Id = 1;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,26 +73,65 @@ public class MainActivity extends MapActivity implements LocationListener{
 		// corner of the desired containing rectangle area,
 		// since this overlay is not intended to change its position static
 		// points are sent
-		boundRectTopLeft = new GeoPoint(UN_RECT_BOUNDING_W,UN_RECT_BOUNDING_N);
-		boundRectBottomRight = new GeoPoint(UN_RECT_BOUNDING_E,UN_RECT_BOUNDING_S);
+		boundRectTopLeft = new GeoPoint(UN_RECT_BOUNDING_W, UN_RECT_BOUNDING_N);
+		boundRectBottomRight = new GeoPoint(UN_RECT_BOUNDING_E,
+				UN_RECT_BOUNDING_S);
 		buildingsOverlay = new BitmapOverlay(buildingsImage, boundRectTopLeft,
 				boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
-		
-		//Test input overlay
+
+		// Test input overlay
 		touchOverlay = new CustomTouchInputOverlay(unMap);
 		unMapOverlayList.add(touchOverlay);
-		
-		//Create user location tracking overlay
+
+		// Create user location tracking overlay
 		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
 		unMapOverlayList.add(userPositionOverlay);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		// getMenuInflater().inflate(R.menu.activity_main, menu);
+		menu.add(group1Id, buttonView, buttonView, "Cambiar Vista");
+		menu.add(group1Id, buttonShow, buttonShow, "Mostrar UN");
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+
+		case 1:
+
+			if (unMap.isSatellite()) {
+				Toast.makeText(MainActivity.this, "Vista Normal", Toast.LENGTH_LONG).show();
+				unMap.setSatellite(false);
+				unMap.invalidate();
+			} else {
+				Toast.makeText(MainActivity.this, "Vista de Satelite", Toast.LENGTH_LONG).show();
+				unMap.setSatellite(true);
+				unMap.invalidate();
+			}
+			return true;
+		case 2:
+			if (buildingsOverlay.isVisible()) {
+				Toast.makeText(MainActivity.this, "Extension del mapa desactivada", Toast.LENGTH_LONG).show();
+				buildingsOverlay.toggleVisibility();
+				unMap.invalidate();
+			} else {
+				Toast.makeText(MainActivity.this, "Extension del mapa activada", Toast.LENGTH_LONG).show();
+				buildingsOverlay.toggleVisibility();
+				unMap.invalidate();
+			}
+			return true;
+
+		default:
+			break;
+
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -97,22 +142,22 @@ public class MainActivity extends MapActivity implements LocationListener{
 
 	public void onLocationChanged(Location arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void onProviderDisabled(String arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void onProviderEnabled(String arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -128,6 +173,5 @@ public class MainActivity extends MapActivity implements LocationListener{
 		super.onResume();
 		userPositionOverlay.enableMyLocation();
 	}
-	
 
 }

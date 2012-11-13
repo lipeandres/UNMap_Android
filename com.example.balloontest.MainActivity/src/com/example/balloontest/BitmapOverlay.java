@@ -13,11 +13,13 @@ public class BitmapOverlay extends Overlay {
 	private Bitmap image;
 	private GeoPoint topLeft;
 	private GeoPoint bottomRight;
+	private boolean bitmapIsVisible;
 
 	public BitmapOverlay(Bitmap _image, GeoPoint _topLeft, GeoPoint _bottomRight) {
 		image = _image;
 		topLeft = _topLeft;
 		bottomRight = _bottomRight;
+		bitmapIsVisible = true;
 	}
 
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
@@ -28,6 +30,7 @@ public class BitmapOverlay extends Overlay {
 		super.draw(canvas, mapView, shadow);
 
 		// convert bitmap's bounding box into pixels
+		if(bitmapIsVisible){
 		Point top_left = new Point();
 		mapView.getProjection().toPixels(topLeft, top_left);
 		Point bottom_right = new Point();
@@ -39,5 +42,17 @@ public class BitmapOverlay extends Overlay {
 
 		// draw bitmap
 		canvas.drawBitmap(image, src, dst, null);
+		}
 	}
+	  public Boolean isVisible() {
+	        return bitmapIsVisible;
+	    }
+
+	    public void setVisibility(Boolean visible) {
+	        bitmapIsVisible = visible;
+	    }
+
+	    public void toggleVisibility() {
+	        bitmapIsVisible = !bitmapIsVisible;
+	    }
 }
