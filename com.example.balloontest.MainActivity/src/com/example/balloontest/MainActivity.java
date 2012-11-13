@@ -2,12 +2,16 @@ package com.example.balloontest;
 
 import java.util.List;
 
+import android.app.Application;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -17,7 +21,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
-public class MainActivity extends MapActivity{
+public class MainActivity extends MapActivity {
 
 	public static final int UN_CENTER_LATITUDE = 4636761;
 	public static final int UN_CENTER_LONGITUDE = -74083450;
@@ -40,6 +44,7 @@ public class MainActivity extends MapActivity{
 	int buttonView = Menu.FIRST;
 	int buttonShow = Menu.FIRST + 1;
 	private int group1Id = 1;
+	ImageButton searchBuildingButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,13 +84,24 @@ public class MainActivity extends MapActivity{
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
 
-		// Test input overlay
+		//--Test input overlay
 		touchOverlay = new CustomTouchInputOverlay(unMap);
 		unMapOverlayList.add(touchOverlay);
 
-		// Create user location tracking overlay
+		//--Create user location tracking overlay
 		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
 		unMapOverlayList.add(userPositionOverlay);
+
+		//--Setting up the search button
+		searchBuildingButton = (ImageButton) findViewById(R.id.building_search_button);
+		searchBuildingButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				Toast.makeText(MainActivity.this,
+						"ImageButton (selector) is clicked!",
+						Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 
 	@Override
@@ -104,22 +120,28 @@ public class MainActivity extends MapActivity{
 		case 1:
 
 			if (unMap.isSatellite()) {
-				Toast.makeText(MainActivity.this, "Vista Normal", Toast.LENGTH_LONG).show();
+				Toast.makeText(MainActivity.this, "Vista Normal",
+						Toast.LENGTH_LONG).show();
 				unMap.setSatellite(false);
 				unMap.invalidate();
 			} else {
-				Toast.makeText(MainActivity.this, "Vista de Satelite", Toast.LENGTH_LONG).show();
+				Toast.makeText(MainActivity.this, "Vista de Satelite",
+						Toast.LENGTH_LONG).show();
 				unMap.setSatellite(true);
 				unMap.invalidate();
 			}
 			return true;
 		case 2:
 			if (buildingsOverlay.isVisible()) {
-				Toast.makeText(MainActivity.this, "Extension del mapa desactivada", Toast.LENGTH_LONG).show();
+				Toast.makeText(MainActivity.this,
+						"Extension del mapa desactivada", Toast.LENGTH_LONG)
+						.show();
 				buildingsOverlay.toggleVisibility();
 				unMap.invalidate();
 			} else {
-				Toast.makeText(MainActivity.this, "Extension del mapa activada", Toast.LENGTH_LONG).show();
+				Toast.makeText(MainActivity.this,
+						"Extension del mapa activada", Toast.LENGTH_LONG)
+						.show();
 				buildingsOverlay.toggleVisibility();
 				unMap.invalidate();
 			}
@@ -131,7 +153,6 @@ public class MainActivity extends MapActivity{
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 
 	@Override
 	protected void onPause() {
@@ -151,6 +172,19 @@ public class MainActivity extends MapActivity{
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public class MyApplication extends Application {
+
+		private String someVariable;
+
+		public String getSomeVariable() {
+			return someVariable;
+		}
+
+		public void setSomeVariable(String someVariable) {
+			this.someVariable = someVariable;
+		}
 	}
 
 }
