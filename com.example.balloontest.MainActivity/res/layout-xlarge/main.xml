@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget32"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/relativeLayout2"
+        android:layout_marginRight="51dp" >
+        
+        <EditText
+        android:id="@+id/edit"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="@string/editText"
+        android:text="@string/editText" />
+        
+        <Button
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_toRightOf="@+id/edit"
+        android:text="@string/search"
+        android:textSize="14dp" />
+        
+        <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit"
+        android:layout_alignParentLeft="true">
+        </ListView>
+        
+    </RelativeLayout>
+ <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
+       
+        
+    <com.google.android.maps.MapView
+        android:id="@+id/mapViewMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:apiKey="039lc3gZQeAtLW3A_QgX9qQ-cQnb8Z8mCz31bUg"
+        android:clickable="true"
+        android:enabled="true" >
+    </com.google.android.maps.MapView>
+ </RelativeLayout>
+    
+    
+</RelativeLayout>
