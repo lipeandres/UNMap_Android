@@ -19,7 +19,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
-public class MainActivity extends MapActivity implements LocationListener {
+public class MainActivity extends MapActivity{
 
 	public static final int UN_CENTER_LATITUDE = 4636761;
 	public static final int UN_CENTER_LONGITUDE = -74083450;
@@ -134,31 +134,6 @@ public class MainActivity extends MapActivity implements LocationListener {
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void onLocationChanged(Location arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onProviderDisabled(String arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onProviderEnabled(String arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	protected void onPause() {
@@ -172,6 +147,12 @@ public class MainActivity extends MapActivity implements LocationListener {
 		// TODO Auto-generated method stub
 		super.onResume();
 		userPositionOverlay.enableMyLocation();
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
