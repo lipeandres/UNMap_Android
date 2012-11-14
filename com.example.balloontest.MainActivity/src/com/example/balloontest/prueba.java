@@ -12,7 +12,7 @@ public class prueba extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	 
+	setContentView(R.layout.main); 
 	//Creamos y abrimos la base de datos
 	BD=new DBHelper(this);
 	BD.open();
@@ -21,7 +21,8 @@ public class prueba extends Activity {
 	//Obtenemos un listado de todos los edificios
 	ArrayList<Building> buildings = new ArrayList<Building>();
 	buildings =(ArrayList<Building>) BD.getBuildings();
-	 
+	Building test = buildings.get(0);
+	System.out.println(test.getName());
 	}
 	 
 	@Override

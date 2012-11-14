@@ -1,9 +1,7 @@
 <resources>
 
     <string name="app_name">balloonTest</string>
-    <!-- app_name de sandra
-    <string name="app_name">UN_map</string>
-     -->  
+    <string name="sandra_app_name">UN_map</string> 
     <string name="menu_settings">Settings</string>
     <string name="search">Buscar</string>
     <string name="title_activity_main">UNmap</string>

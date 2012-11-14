@@ -21,7 +21,7 @@
 	android:layout_alignParentTop="true"
 	android:layout_alignParentLeft="true" />
 
-<com.google.android.maps.MapView
+<!-- <com.google.android.maps.MapView
         android:id="@+id/mapViewMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,6 +29,6 @@
         android:apiKey="039lc3gZQeAtLW3A_QgX9qQ-cQnb8Z8mCz31bUg"
         android:enabled="true"
         android:clickable="true" />
-
+ -->
 </RelativeLayout>
 
