@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,6 +68,7 @@ public class MainActivity extends MapActivity {
 		unMapController.animateTo(baseLocation);
 		unMapController.setZoom(UN_BASE_ZOOM);
 
+
 		// --Create a bitmap overlay that will contain the buildings--
 		// First we get the image from the resources
 		Resources res = getResources();
@@ -102,6 +104,12 @@ public class MainActivity extends MapActivity {
 						Toast.LENGTH_SHORT).show();
 			}
 		});
+		
+		//Calculate location between 2 geopoints (TEST!!!)
+		float[] distance;
+//		Location.distanceBetween((float)(boundRectTopLeft.getLatitudeE6()/1E6), (float)(boundRectTopLeft.getLongitudeE6()/1E6),
+//				(float)(boundRectBottomRight.getLatitudeE6()/1E6), (float)(boundRectBottomRight.getLongitudeE6()/1E6), distance);
+//		
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class CustomTouchInputOverlay extends Overlay {
 	private MapView map;
 	public Context context;
 	private SimpleItemizedOverlay buildingBalloon;
-	private boolean balloonExists;// tracks wheter or not a balloon has been
+	private boolean balloonExists;// tracks whether or not a balloon has been
 									// created
 	Drawable buildingMarker;
 	List<Overlay> mapOverlayList;
