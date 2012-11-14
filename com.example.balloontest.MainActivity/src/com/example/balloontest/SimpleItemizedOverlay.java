@@ -3,12 +3,13 @@ package com.example.balloontest;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
-
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
 public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
@@ -40,6 +41,10 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 	protected boolean onBalloonTap(int index, OverlayItem item) {
 		Toast.makeText(c, "onBalloonTap for overlay index " + index,
 				Toast.LENGTH_LONG).show();
+		Intent buildingInfoIntent = new Intent(c,InformationActivity.class);
+		buildingInfoIntent.setClassName("com.example.balloontest", "com.example.balloontest.InformationActivity");
+		buildingInfoIntent.putExtra("building_id", 30);
+		c.startActivity(buildingInfoIntent);
 		return true;
 	}
 	
