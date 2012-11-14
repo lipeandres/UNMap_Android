@@ -44,3 +44,9 @@ local.properties
 
 # PDT-specific
 .buildpath
+
+#svn
+.snv
+.svn*
+.svn/
+.svn-base
