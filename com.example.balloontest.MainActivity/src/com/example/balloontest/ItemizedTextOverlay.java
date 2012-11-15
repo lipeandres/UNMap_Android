@@ -2,10 +2,10 @@ package com.example.balloontest;
 
 import java.util.ArrayList;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
 import com.google.android.maps.GeoPoint;
@@ -57,7 +57,7 @@ public class ItemizedTextOverlay extends ItemizedOverlay<OverlayItem> {
 			boolean shadow) {
 		super.draw(canvas, mapView, shadow);
 
-		if (shadow == false) {
+		if ((shadow == false) && mapView.getZoomLevel()>=17) {
 			// cycle through all overlays
 			for (int index = 0; index < mOverlays.size(); index++) {
 				OverlayItem item = mOverlays.get(index);
@@ -67,27 +67,44 @@ public class ItemizedTextOverlay extends ItemizedOverlay<OverlayItem> {
 				Point ptScreenCoord = new Point();
 				mapView.getProjection().toPixels(point, ptScreenCoord);
 
-				// Paint
-				Paint paint = new Paint();
-				paint.setTextAlign(Paint.Align.CENTER);
-				paint.setTextSize(mTextSize);
-				paint.setARGB(150, 0, 0, 0); // alpha, r, g, b (Black, semi
-												// see-through)
+//				// Paint
+//				Paint paint = new Paint();
+//				paint.setTextAlign(Paint.Align.CENTER);
+//				paint.setTextSize(mTextSize);
+//				paint.setARGB(255, 255, 255, 255);
+//				paint.// alpha, r, g, b (Black, semi
+//												// see-through)
+				
+				Paint strokePaint = new Paint();
+			    strokePaint.setARGB(255, 0, 0, 0);
+			    strokePaint.setTextAlign(Paint.Align.CENTER);
+			    strokePaint.setTextSize(mTextSize);
+			    strokePaint.setTypeface(Typeface.DEFAULT_BOLD);
+			    strokePaint.setStyle(Paint.Style.STROKE);
+			    strokePaint.setStrokeWidth(4);
+
+			    Paint textPaint = new Paint();
+			    textPaint.setARGB(255, 255, 255, 255);
+			    textPaint.setTextAlign(Paint.Align.CENTER);
+			    textPaint.setTextSize(mTextSize);
+			    textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 
 				// show text to the right of the icon
 				canvas.drawText(item.getTitle(), ptScreenCoord.x,
-						ptScreenCoord.y + mTextSize, paint);
+						ptScreenCoord.y + mTextSize, strokePaint);
+				canvas.drawText(item.getTitle(), ptScreenCoord.x,
+						ptScreenCoord.y + mTextSize, textPaint);
 			}
 		}
 	}
 
-	public void addOverlay(OverlayItem overlay) {
-		mOverlays.add(overlay);
+	public void addItem(OverlayItem overlayItem) {
+		mOverlays.add(overlayItem);
 		populate();
 	}
 
-	public void removeOverlay(OverlayItem overlay) {
-		mOverlays.remove(overlay);
+	public void removeItem(OverlayItem overlayItem) {
+		mOverlays.remove(overlayItem);
 		populate();
 	}
 

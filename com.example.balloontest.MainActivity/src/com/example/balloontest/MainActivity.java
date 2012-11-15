@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class MainActivity extends MapActivity {
 
@@ -48,6 +50,8 @@ public class MainActivity extends MapActivity {
 	int buttonShow = Menu.FIRST + 1;
 	private int group1Id = 1;
 	ImageButton searchBuildingButton;
+	ItemizedTextOverlay buildingTextOverlay;
+	Drawable textMarker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -115,9 +119,16 @@ public class MainActivity extends MapActivity {
 		buildingList = (ArrayList<Building>) buildingDB.getBuildings();
 		//Since the DB is static we can close it now
 		buildingDB.close();
-		
+	
+		 
+		//--Testing text overlay
+		textMarker = (Drawable) res.getDrawable(R.drawable.marker);
+		buildingTextOverlay = new ItemizedTextOverlay(textMarker, MainActivity.this, 20);
+		OverlayItem textitem = new OverlayItem(boundRectTopLeft, "Hola", "Prueba");
+		buildingTextOverlay.addItem(textitem);
+		unMapOverlayList.add(buildingTextOverlay);
 		//Calculate location between 2 geopoints (TEST!!!)
-		float[] distance;
+//		float[] distance;
 //		Location.distanceBetween((float)(boundRectTopLeft.getLatitudeE6()/1E6), (float)(boundRectTopLeft.getLongitudeE6()/1E6),
 //				(float)(boundRectBottomRight.getLatitudeE6()/1E6), (float)(boundRectBottomRight.getLongitudeE6()/1E6), distance);
 //		
