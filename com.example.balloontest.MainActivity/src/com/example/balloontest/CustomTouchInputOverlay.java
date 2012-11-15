@@ -67,7 +67,7 @@ public class CustomTouchInputOverlay extends Overlay {
 			balloonExists = true;
 			// GeoPoint point = new GeoPoint(4631543,-74094501);
 			buildingMarker = context.getResources().getDrawable(
-					R.drawable.marker);
+					R.drawable.orangemarker);
 			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map);
 			buildingBalloon.setShowClose(false);
 			OverlayItem overlayItem = new OverlayItem(touchedPoint,

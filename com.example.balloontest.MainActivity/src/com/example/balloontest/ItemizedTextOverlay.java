@@ -17,13 +17,17 @@ public class ItemizedTextOverlay extends ItemizedOverlay<OverlayItem> {
 	// member variables
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
+	private int baseTextSize;
 	private int mTextSize;
+	private boolean noName;
 
 	public ItemizedTextOverlay(Drawable defaultMarker, Context context,
 			int textSize) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
 		mTextSize = textSize;
+		baseTextSize= textSize;
+		noName=true;
 	}
 
 	// In order for the populate() method to read each OverlayItem, it will make
@@ -57,8 +61,17 @@ public class ItemizedTextOverlay extends ItemizedOverlay<OverlayItem> {
 			boolean shadow) {
 		super.draw(canvas, mapView, shadow);
 
-		if ((shadow == false) && mapView.getZoomLevel()>=17) {
+		if ((shadow == false) && (mapView.getZoomLevel()>=17)) {
 			// cycle through all overlays
+			if(mapView.getZoomLevel()>=17 && mapView.getZoomLevel()<19){
+				mTextSize = mapView.getZoomLevel()-8;
+				noName=true;
+			}
+			else{
+				mTextSize = baseTextSize;
+				noName=false;
+			}
+
 			for (int index = 0; index < mOverlays.size(); index++) {
 				OverlayItem item = mOverlays.get(index);
 
@@ -89,11 +102,21 @@ public class ItemizedTextOverlay extends ItemizedOverlay<OverlayItem> {
 			    textPaint.setTextSize(mTextSize);
 			    textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 
-				// show text to the right of the icon
-				canvas.drawText(item.getTitle(), ptScreenCoord.x,
-						ptScreenCoord.y + mTextSize, strokePaint);
-				canvas.drawText(item.getTitle(), ptScreenCoord.x,
-						ptScreenCoord.y + mTextSize, textPaint);
+				// Print the building name and number
+			    if(noName)
+			    {
+					canvas.drawText(item.getSnippet(), ptScreenCoord.x,
+							ptScreenCoord.y + mTextSize, strokePaint);
+					canvas.drawText(item.getSnippet(), ptScreenCoord.x,
+							ptScreenCoord.y + mTextSize, textPaint);			    	
+			    }
+			    else
+			    {
+					canvas.drawText(item.getSnippet()+"-"+item.getTitle(), ptScreenCoord.x,
+							ptScreenCoord.y + mTextSize, strokePaint);
+					canvas.drawText(item.getSnippet()+"-"+item.getTitle(), ptScreenCoord.x,
+							ptScreenCoord.y + mTextSize, textPaint);
+			    }
 			}
 		}
 	}
