@@ -1,9 +1,11 @@
 package com.example.balloontest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.view.MotionEvent;
 
 import com.google.android.maps.GeoPoint;
@@ -21,7 +23,10 @@ public class CustomTouchInputOverlay extends Overlay {
 	private GeoPoint BoundsBottomLeftCorner;
 	private GeoPoint BoundsTopRightCorner;
 	private MapView map;
+	private Location touchedLocation;
+	private Building nearestBuilding;
 	public Context context;
+	ArrayList<Building> buildingList;
 	private SimpleItemizedOverlay buildingBalloon;
 	private boolean balloonExists;// tracks whether or not a balloon has been
 									// created
@@ -32,7 +37,8 @@ public class CustomTouchInputOverlay extends Overlay {
 	private static final int UN_LIMIT_N = 4644974;
 	private static final int UN_LIMIT_E = -74079201;
 
-	public CustomTouchInputOverlay(MapView _map) {
+	public CustomTouchInputOverlay(MapView _map,
+			ArrayList<Building> _buildingList) {
 		map = _map;
 		context = _map.getContext();
 		mapOverlayList = _map.getOverlays();
@@ -40,6 +46,9 @@ public class CustomTouchInputOverlay extends Overlay {
 		BoundsTopLeftCorner = new GeoPoint(UN_LIMIT_N, UN_LIMIT_W);
 		BoundsBottomLeftCorner = new GeoPoint(UN_LIMIT_S, UN_LIMIT_W);
 		BoundsTopRightCorner = new GeoPoint(UN_LIMIT_N, UN_LIMIT_E);
+		buildingList = _buildingList;
+		touchedLocation = new Location("");
+		nearestBuilding = new Building();
 	}
 
 	public boolean onTouchEvent(MotionEvent e, MapView m) {
@@ -64,20 +73,29 @@ public class CustomTouchInputOverlay extends Overlay {
 		}
 		// If the press was long enough, show balloon
 		if (stop - start > 150) {
+			//Get the nearest building to the touch calculating the distance to each one
+			//we use Location.distanceTo() which receives Location objects, in this case created
+			//with the help of the existing geopoints
+			touchedLocation.setLatitude((float)(touchedPoint.getLatitudeE6()/1E6));
+			touchedLocation.setLongitude((float)(touchedPoint.getLongitudeE6()/1E6));
+			int nearestBuildingIndex = getNearestBuildingIndex();
+			nearestBuilding = buildingList.get(nearestBuildingIndex);
+			GeoPoint nearestBuildingPoint = new GeoPoint(nearestBuilding.getLatitud(), nearestBuilding.getLongitud());
+			
 			balloonExists = true;
-			// GeoPoint point = new GeoPoint(4631543,-74094501);
 			buildingMarker = context.getResources().getDrawable(
 					R.drawable.orangemarker);
-			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map);
+			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map, nearestBuildingIndex);
 			buildingBalloon.setShowClose(false);
-			OverlayItem overlayItem = new OverlayItem(touchedPoint,
-					"Edificio 411", "Laboratorios de Ingenieria");
+			OverlayItem overlayItem = new OverlayItem(nearestBuildingPoint,
+					"Edificio "+String.valueOf(nearestBuilding.getNumber()), nearestBuilding.getName());
 			buildingBalloon.addOverlay(overlayItem);
 			mapOverlayList.add(buildingBalloon);
 			buildingBalloon.setFocus(overlayItem);
 			return true;
 		}
-		// if the map moves, don't place marks and place boundaries for the movement	
+		// if the map moves, don't place marks and place boundaries for the
+		// movement
 		if (e.getAction() == MotionEvent.ACTION_MOVE) {
 			start = 0;
 			stop = 0;
@@ -172,5 +190,28 @@ public class CustomTouchInputOverlay extends Overlay {
 		}
 
 		return false;
+	}
+
+	private int getNearestBuildingIndex() {
+		int i = 0;
+		int nearestBuildingIndex=0;
+		Location tempBuildingLocation;
+		tempBuildingLocation = new Location("");
+		float distance = 0;
+		float prev_distance = 9999999;
+		while (i < buildingList.size()) {
+			tempBuildingLocation.setLatitude((double) (buildingList.get(i)
+					.getLatitud() / 1E6));
+			tempBuildingLocation.setLongitude((double) (buildingList.get(i)
+					.getLongitud() / 1E6));
+			distance = touchedLocation.distanceTo(tempBuildingLocation);
+			if (distance < prev_distance) {
+				prev_distance = distance;
+				nearestBuildingIndex=i;
+			}
+			i++;
+		}
+		System.out.println(String.valueOf(nearestBuildingIndex));
+		return nearestBuildingIndex;
 	}
 }

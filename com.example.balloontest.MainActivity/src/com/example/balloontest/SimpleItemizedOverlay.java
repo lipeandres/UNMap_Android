@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
@@ -16,10 +15,12 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 
 	private ArrayList<OverlayItem> m_overlays = new ArrayList<OverlayItem>();
 	private Context c;
+	private int buildingIndex;
 	
-	public SimpleItemizedOverlay(Drawable defaultMarker, MapView mapView) {
+	public SimpleItemizedOverlay(Drawable defaultMarker, MapView mapView, int _buildingIndex) {
 		super(boundCenter(defaultMarker), mapView);
 		c = mapView.getContext();
+		buildingIndex=_buildingIndex;
 	}
 
 	public void addOverlay(OverlayItem overlay) {
@@ -43,7 +44,7 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 				Toast.LENGTH_LONG).show();
 		Intent buildingInfoIntent = new Intent(c,InformationActivity.class);
 		buildingInfoIntent.setClassName("com.example.balloontest", "com.example.balloontest.InformationActivity");
-		buildingInfoIntent.putExtra("building_id", 30);
+		buildingInfoIntent.putExtra("building_id", buildingIndex);
 		c.startActivity(buildingInfoIntent);
 		return true;
 	}

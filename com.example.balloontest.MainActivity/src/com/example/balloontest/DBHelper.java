@@ -32,14 +32,14 @@ public class DBHelper extends SQLiteOpenHelper{
 	public final static String KEY_LATITUD = "latitud";
 	
 	 
-	//Array de strings para su uso en los diferentes métodos
+	//Array de strings para su uso en los diferentes m��todos
 	private static final String[] cols = new String[] { KEY_ID, KEY_NAME, KEY_NUMBER, KEY_LONGITUD, KEY_LATITUD };
 	 
 	/**
 	* Constructor
-	* Toma referencia hacia el contexto de la aplicación que lo invoca para poder acceder a los 'assets' 
-	* y 'resources' de la aplicación.
-	* Crea un objeto DBOpenHelper que nos permitirá controlar la apertura de la base de datos.
+	* Toma referencia hacia el contexto de la aplicaci��n que lo invoca para poder acceder a los 'assets' 
+	* y 'resources' de la aplicaci��n.
+	* Crea un objeto DBOpenHelper que nos permitir�� controlar la apertura de la base de datos.
 	* @param context
 	*/
 	public DBHelper(Context context) {
@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	}
 	 
 	/**
-	* Crea una base de datos vacía en el sistema y la reescribe con nuestro fichero de base de datos.
+	* Crea una base de datos vac��a en el sistema y la reescribe con nuestro fichero de base de datos.
 	* */
 	public void createDataBase() throws IOException{
 	 
@@ -59,8 +59,8 @@ public class DBHelper extends SQLiteOpenHelper{
 		if(dbExist){
 		//la base de datos existe y no hacemos nada.
 		}else{
-				//Llamando a este método se crea la base de datos vacía en la ruta por defecto del sistema
-				//de nuestra aplicación por lo que podremos sobreescribirla con nuestra base de datos.
+				//Llamando a este m��todo se crea la base de datos vac��a en la ruta por defecto del sistema
+				//de nuestra aplicaci��n por lo que podremos sobreescribirla con nuestra base de datos.
 				this.getReadableDatabase();
 			 
 			try {
@@ -75,7 +75,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	}
 	 
 	/**
-	* Comprueba si la base de datos existe para evitar copiar siempre el fichero cada vez que se abra la aplicación.
+	* Comprueba si la base de datos existe para evitar copiar siempre el fichero cada vez que se abra la aplicaci��n.
 	* @return true si existe, false si no existe
 	*/
 	private boolean checkDataBase(){
@@ -85,11 +85,11 @@ public class DBHelper extends SQLiteOpenHelper{
 		try{
 		 
 			String myPath = DB_PATH + DB_NAME;
-			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 			 
 		}catch(SQLiteException e){
 		 
-		//si llegamos aqui es porque la base de datos no existe todavía.
+		//si llegamos aqui es porque la base de datos no existe todav��a.
 		 
 		}
 		if(checkDB != null){
@@ -101,8 +101,8 @@ public class DBHelper extends SQLiteOpenHelper{
 	}
 	 
 	/**
-	* Copia nuestra base de datos desde la carpeta assets a la recién creada
-	* base de datos en la carpeta de sistema, desde dónde podremos acceder a ella.
+	* Copia nuestra base de datos desde la carpeta assets a la reci��n creada
+	* base de datos en la carpeta de sistema, desde d��nde podremos acceder a ella.
 	* Esto se hace con bytestream.
 	* */
 	private void copyDataBase() throws IOException{
@@ -110,10 +110,10 @@ public class DBHelper extends SQLiteOpenHelper{
 	//Abrimos el fichero de base de datos como entrada
 	InputStream myInput = context.getAssets().open(DB_NAME);
 	 
-	//Ruta a la base de datos vacía recién creada
+	//Ruta a la base de datos vac��a reci��n creada
 	String outFileName = DB_PATH + DB_NAME;
 	 
-	//Abrimos la base de datos vacía como salida
+	//Abrimos la base de datos vac��a como salida
 	OutputStream myOutput = new FileOutputStream(outFileName);
 	 
 	//Transferimos los bytes desde el fichero de entrada al de salida
@@ -140,7 +140,7 @@ public class DBHelper extends SQLiteOpenHelper{
 		}
 		 
 		String myPath = DB_PATH + DB_NAME;
-		db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+		db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 	 
 	}
 	 
@@ -165,7 +165,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	}
 	
 	/*Estas funcionalidades no aplican para el alcance del actual proyecto, pero 
-	en la escabilidad del mismo pueden ser útiles
+	en la escabilidad del mismo pueden ser ��tiles
 	
 	//INSERTAR NUEVO EDIFICIO
 	public long insertBuilding(Integer id, String name, String number, Integer longitud, Integer latitud) {
@@ -191,8 +191,8 @@ public class DBHelper extends SQLiteOpenHelper{
 	ContentValues newValues = new ContentValues();
 	newValues.put(KEY_NAME, name);
 	newValues.put(KEY_NUMBER, number);
-	newValues.put(KEY_LONGITUD, longitud);
 	newValues.put(KEY_LATITUD, latitud);
+	newValues.put(KEY_LONGITUD, longitud);
 	return db.update(DATABASE_TABLE, newValues, KEY_ID + "=" + _rowIndex, null) > 0;
 	}
 	
@@ -208,8 +208,8 @@ public class DBHelper extends SQLiteOpenHelper{
 					building = new Building(
 				    result.getString(result.getColumnIndex(KEY_NAME)),
 				    result.getString(result.getColumnIndex(KEY_NUMBER)),
-					result.getInt(result.getColumnIndex(KEY_LONGITUD)),
-					result.getInt(result.getColumnIndex(KEY_LATITUD))
+					result.getInt(result.getColumnIndex(KEY_LATITUD)),
+					result.getInt(result.getColumnIndex(KEY_LONGITUD))
 					);
 				}
 			}
@@ -225,8 +225,8 @@ public class DBHelper extends SQLiteOpenHelper{
 			buildings.add(new Building(
 					result.getString(result.getColumnIndex(KEY_NAME)),
 				    result.getString(result.getColumnIndex(KEY_NUMBER)),
-					result.getInt(result.getColumnIndex(KEY_LONGITUD)),
-					result.getInt(result.getColumnIndex(KEY_LATITUD))
+					result.getInt(result.getColumnIndex(KEY_LATITUD)),
+					result.getInt(result.getColumnIndex(KEY_LONGITUD))
 					)
 			);
 		} while(result.moveToNext());

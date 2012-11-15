@@ -48,8 +48,10 @@ public class MainActivity extends MapActivity {
 	GeoPoint boundRectBottomRight;
 	CustomTouchInputOverlay touchOverlay;
 	MyLocationOverlay userPositionOverlay;
-	int buttonView = Menu.FIRST;
-	int buttonShow = Menu.FIRST + 1;
+	int toggleView = Menu.FIRST;
+	int toggleBuildingOverlay = Menu.FIRST + 1;
+	int toggleRoadOverlay = Menu.FIRST + 2;
+	int togglePedestrianOverlay = Menu.FIRST + 3;
 	private int group1Id = 1;
 	ImageButton searchBuildingButton;
 	ItemizedTextOverlay buildingTextOverlay;
@@ -108,9 +110,6 @@ public class MainActivity extends MapActivity {
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
 
-		// --Test input overlay
-		touchOverlay = new CustomTouchInputOverlay(unMap);
-		unMapOverlayList.add(touchOverlay);
 
 		// --Create user location tracking overlay
 		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
@@ -143,28 +142,28 @@ public class MainActivity extends MapActivity {
 
 		while (i < buildingList.size()) {
 			buildingTextOverlay.addItem(new OverlayItem(new GeoPoint(
-					buildingList.get(i).getLongitud(), buildingList.get(i)
-							.getLatitud()), buildingList.get(i).getName(),
+					buildingList.get(i).getLatitud(), buildingList.get(i)
+							.getLongitud()), buildingList.get(i).getName(),
 					String.valueOf(buildingList.get(i).getNumber())));
 			System.out.println(buildingList.get(i).getLatitud());
 			i++;
+			
 		}
 
 		unMapOverlayList.add(buildingTextOverlay);
-		// Calculate location between 2 geopoints (TEST!!!)
-		// float[] distance;
-		// Location.distanceBetween((float)(boundRectTopLeft.getLatitudeE6()/1E6),
-		// (float)(boundRectTopLeft.getLongitudeE6()/1E6),
-		// (float)(boundRectBottomRight.getLatitudeE6()/1E6),
-		// (float)(boundRectBottomRight.getLongitudeE6()/1E6), distance);
-		//
+		
+		// --Test input overlay
+		touchOverlay = new CustomTouchInputOverlay(unMap,buildingList);
+		unMapOverlayList.add(touchOverlay);	
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.activity_main, menu);
-		menu.add(group1Id, buttonView, buttonView, "Cambiar Vista");
-		menu.add(group1Id, buttonShow, buttonShow, "Mostrar UN");
+		menu.add(group1Id, toggleView, toggleView, "Cambiar Vista");
+		menu.add(group1Id, toggleBuildingOverlay, toggleBuildingOverlay, "Edificios");
+		menu.add(group1Id, toggleRoadOverlay,toggleRoadOverlay, "Rutas Vehiculares");
+		menu.add(group1Id, togglePedestrianOverlay, togglePedestrianOverlay, "Caminos Peatonales");
 		return true;
 	}
 
@@ -177,12 +176,12 @@ public class MainActivity extends MapActivity {
 
 			if (unMap.isSatellite()) {
 				Toast.makeText(MainActivity.this, "Vista Normal",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 				unMap.setSatellite(false);
 				unMap.invalidate();
 			} else {
 				Toast.makeText(MainActivity.this, "Vista de Satelite",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 				unMap.setSatellite(true);
 				unMap.invalidate();
 			}
@@ -190,15 +189,45 @@ public class MainActivity extends MapActivity {
 		case 2:
 			if (buildingsOverlay.isVisible()) {
 				Toast.makeText(MainActivity.this,
-						"Extension del mapa desactivada", Toast.LENGTH_LONG)
+						"Capa de edificios desactivada", Toast.LENGTH_SHORT)
 						.show();
 				buildingsOverlay.toggleVisibility();
 				unMap.invalidate();
 			} else {
 				Toast.makeText(MainActivity.this,
-						"Extension del mapa activada", Toast.LENGTH_LONG)
+						"Capa de edificios activada", Toast.LENGTH_SHORT)
 						.show();
 				buildingsOverlay.toggleVisibility();
+				unMap.invalidate();
+			}
+			return true;
+		case 3:
+			if (roadsOverlay.isVisible()) {
+				Toast.makeText(MainActivity.this,
+						"Capa de rutas vehiculares desactivada", Toast.LENGTH_SHORT)
+						.show();
+				roadsOverlay.toggleVisibility();
+				unMap.invalidate();
+			} else {
+				Toast.makeText(MainActivity.this,
+						"Capa de rutas vehiculares activada", Toast.LENGTH_SHORT)
+						.show();
+				roadsOverlay.toggleVisibility();
+				unMap.invalidate();
+			}
+			return true;
+		case 4:
+			if (pedestrianOverlay.isVisible()) {
+				Toast.makeText(MainActivity.this,
+						"Capa de caminos peatonales desactivada", Toast.LENGTH_SHORT)
+						.show();
+				pedestrianOverlay.toggleVisibility();
+				unMap.invalidate();
+			} else {
+				Toast.makeText(MainActivity.this,
+						"Capa de caminos peatonales activada", Toast.LENGTH_SHORT)
+						.show();
+				pedestrianOverlay.toggleVisibility();
 				unMap.invalidate();
 			}
 			return true;

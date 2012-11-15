@@ -16,7 +16,6 @@ import com.google.android.maps.OverlayItem;
 public class ItemizedTextOverlay extends ItemizedOverlay<OverlayItem> {
 	// member variables
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-	private Context mContext;
 	private int baseTextSize;
 	private int mTextSize;
 	private boolean noName;
@@ -24,7 +23,6 @@ public class ItemizedTextOverlay extends ItemizedOverlay<OverlayItem> {
 	public ItemizedTextOverlay(Drawable defaultMarker, Context context,
 			int textSize) {
 		super(boundCenterBottom(defaultMarker));
-		mContext = context;
 		mTextSize = textSize;
 		baseTextSize= textSize;
 		noName=true;

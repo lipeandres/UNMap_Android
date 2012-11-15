@@ -1,6 +1,5 @@
 package com.example.balloontest;
 
-import android.database.Cursor;
 
 //Se importo este y no el SQL
 
