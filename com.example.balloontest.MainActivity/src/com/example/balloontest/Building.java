@@ -9,14 +9,16 @@ public class Building {
 	private String number;
 	private Integer longitud;
 	private Integer latitud;
+	private Integer id;
 	
 	
-	public Building(String name, String number, Integer longitud, Integer latitud) {
+	public Building(String name, String number, Integer longitud, Integer latitud,Integer id) {
 		super();
 		this.name=name;
 		this.number=number;
 		this.longitud=longitud;
 		this.latitud=latitud;
+		this.id=id;
 		}
 	
 	public Building() {
@@ -25,6 +27,10 @@ public class Building {
 
 	public String getName() {
 	return name;
+	}
+	
+	public Integer getId() {
+	return id;
 	}
 	
 	public String getNumber() {

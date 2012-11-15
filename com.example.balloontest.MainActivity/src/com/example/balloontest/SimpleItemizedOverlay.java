@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.widget.Toast;
 
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
@@ -15,12 +14,12 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 
 	private ArrayList<OverlayItem> m_overlays = new ArrayList<OverlayItem>();
 	private Context c;
-	private int buildingIndex;
+	private int buildingID;
 	
-	public SimpleItemizedOverlay(Drawable defaultMarker, MapView mapView, int _buildingIndex) {
+	public SimpleItemizedOverlay(Drawable defaultMarker, MapView mapView, int _buildingID) {
 		super(boundCenter(defaultMarker), mapView);
 		c = mapView.getContext();
-		buildingIndex=_buildingIndex;
+		buildingID=_buildingID;
 	}
 
 	public void addOverlay(OverlayItem overlay) {
@@ -40,11 +39,9 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 
 	@Override
 	protected boolean onBalloonTap(int index, OverlayItem item) {
-		Toast.makeText(c, "onBalloonTap for overlay index " + index,
-				Toast.LENGTH_LONG).show();
 		Intent buildingInfoIntent = new Intent(c,InformationActivity.class);
 		buildingInfoIntent.setClassName("com.example.balloontest", "com.example.balloontest.InformationActivity");
-		buildingInfoIntent.putExtra("building_id", buildingIndex);
+		buildingInfoIntent.putExtra("building_id", buildingID);
 		c.startActivity(buildingInfoIntent);
 		return true;
 	}

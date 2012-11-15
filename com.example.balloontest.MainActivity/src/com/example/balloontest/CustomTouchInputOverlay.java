@@ -85,7 +85,7 @@ public class CustomTouchInputOverlay extends Overlay {
 			balloonExists = true;
 			buildingMarker = context.getResources().getDrawable(
 					R.drawable.orangemarker);
-			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map, nearestBuildingIndex);
+			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map, nearestBuilding.getId());
 			buildingBalloon.setShowClose(false);
 			OverlayItem overlayItem = new OverlayItem(nearestBuildingPoint,
 					"Edificio "+String.valueOf(nearestBuilding.getNumber()), nearestBuilding.getName());

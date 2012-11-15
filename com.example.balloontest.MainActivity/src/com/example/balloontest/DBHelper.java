@@ -202,14 +202,15 @@ public class DBHelper extends SQLiteOpenHelper{
 			null, null);
 			if ((result.getCount() == 0) || !result.moveToFirst()) {
 				//Si el edificio no existe, devuelve un edificio con valores a, a, -1 y -1
-				building = new Building("a","a",-1,-1);
+				building = new Building("a","a",-1,-1,-1);
 			} else {
 				if (result.moveToFirst()) {
 					building = new Building(
 				    result.getString(result.getColumnIndex(KEY_NAME)),
 				    result.getString(result.getColumnIndex(KEY_NUMBER)),
 					result.getInt(result.getColumnIndex(KEY_LATITUD)),
-					result.getInt(result.getColumnIndex(KEY_LONGITUD))
+					result.getInt(result.getColumnIndex(KEY_LONGITUD)),
+					result.getInt(result.getColumnIndex(KEY_ID))
 					);
 				}
 			}
@@ -226,7 +227,8 @@ public class DBHelper extends SQLiteOpenHelper{
 					result.getString(result.getColumnIndex(KEY_NAME)),
 				    result.getString(result.getColumnIndex(KEY_NUMBER)),
 					result.getInt(result.getColumnIndex(KEY_LATITUD)),
-					result.getInt(result.getColumnIndex(KEY_LONGITUD))
+					result.getInt(result.getColumnIndex(KEY_LONGITUD)),
+					result.getInt(result.getColumnIndex(KEY_ID))
 					)
 			);
 		} while(result.moveToNext());

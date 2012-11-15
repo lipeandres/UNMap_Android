@@ -3,7 +3,6 @@ package com.example.balloontest;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Application;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -257,19 +256,6 @@ public class MainActivity extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	public class MyApplication extends Application {
-
-		private String someVariable;
-
-		public String getSomeVariable() {
-			return someVariable;
-		}
-
-		public void setSomeVariable(String someVariable) {
-			this.someVariable = someVariable;
-		}
 	}
 
 }
