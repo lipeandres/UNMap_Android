@@ -32,7 +32,7 @@ public class MainActivity extends MapActivity {
 	public static final int UN_RECT_BOUNDING_W = 4644974;
 	public static final int UN_RECT_BOUNDING_S = -74079201;
 	public static final int UN_BASE_ZOOM = 17;
-	private DBHelper buildingDB; 
+	private DBHelper buildingDB;
 
 	CustomMapView unMap;
 	List<Overlay> unMapOverlayList;
@@ -54,6 +54,7 @@ public class MainActivity extends MapActivity {
 	ImageButton searchBuildingButton;
 	ItemizedTextOverlay buildingTextOverlay;
 	Drawable textMarker;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,14 +75,12 @@ public class MainActivity extends MapActivity {
 		// the map is animated to be in the correct location and zoom
 		unMapController.animateTo(baseLocation);
 		unMapController.setZoom(UN_BASE_ZOOM);
-		
-
 
 		// --Create a bitmap overlay that will contain the pedestrianPaths--
 		// First we get the image from the resources
 		Resources res = getResources();
-		pedestrianImage = BitmapFactory
-				.decodeResource(res, R.drawable.pedestrian_overlay);
+		pedestrianImage = BitmapFactory.decodeResource(res,
+				R.drawable.pedestrian_overlay);
 		// We set the geopoints that indicate the top left and bottom right
 		// corner of the desired containing rectangle area,
 		// since this overlay is not intended to change its position static
@@ -89,36 +88,35 @@ public class MainActivity extends MapActivity {
 		boundRectTopLeft = new GeoPoint(UN_RECT_BOUNDING_W, UN_RECT_BOUNDING_N);
 		boundRectBottomRight = new GeoPoint(UN_RECT_BOUNDING_E,
 				UN_RECT_BOUNDING_S);
-		pedestrianOverlay = new BitmapOverlay(pedestrianImage, boundRectTopLeft,
-				boundRectBottomRight);
+		pedestrianOverlay = new BitmapOverlay(pedestrianImage,
+				boundRectTopLeft, boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(pedestrianOverlay);
-		
+
 		// --Create a bitmap overlay that will contain the roads overlay--
-		roadsImage = BitmapFactory
-				.decodeResource(res, R.drawable.road_overlay);
+		roadsImage = BitmapFactory.decodeResource(res, R.drawable.road_overlay);
 		roadsOverlay = new BitmapOverlay(roadsImage, boundRectTopLeft,
 				boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(roadsOverlay);
-		
+
 		// --Create a bitmap overlay that will contain the roads buildings--
-		buildingsImage = BitmapFactory
-				.decodeResource(res, R.drawable.building_overlay);
+		buildingsImage = BitmapFactory.decodeResource(res,
+				R.drawable.building_overlay);
 		buildingsOverlay = new BitmapOverlay(buildingsImage, boundRectTopLeft,
 				boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
 
-		//--Test input overlay
+		// --Test input overlay
 		touchOverlay = new CustomTouchInputOverlay(unMap);
 		unMapOverlayList.add(touchOverlay);
 
-		//--Create user location tracking overlay
+		// --Create user location tracking overlay
 		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
 		unMapOverlayList.add(userPositionOverlay);
 
-		//--Setting up the search button
+		// --Setting up the search button
 		searchBuildingButton = (ImageButton) findViewById(R.id.building_search_button);
 		searchBuildingButton.setOnClickListener(new OnClickListener() {
 
@@ -128,43 +126,40 @@ public class MainActivity extends MapActivity {
 						Toast.LENGTH_SHORT).show();
 			}
 		});
-		
-		//--Obtain the building list and information from the database
+
+		// --Obtain the building list and information from the database
 		buildingDB = new DBHelper(MainActivity.this);
 		buildingDB.open();
 		ArrayList<Building> buildingList = new ArrayList<Building>();
 		buildingList = (ArrayList<Building>) buildingDB.getBuildings();
-		//Since the DB is static we can close it now
+		// Since the DB is static we can close it now
 		buildingDB.close();
-	
-		 
-		//--Testing text overlay
+
+		// --Testing text overlay
 		textMarker = (Drawable) res.getDrawable(R.drawable.bluemarker);
-		buildingTextOverlay = new ItemizedTextOverlay(textMarker, MainActivity.this, 13);
-		int i=0;
-		
-		while(i < buildingList.size())
-		{	
-		buildingTextOverlay.addItem
-				(
-				new OverlayItem(
-						new GeoPoint(buildingList.get(i).getLongitud(),buildingList.get(i).getLatitud()),
-						buildingList.get(i).getName(),
-						String.valueOf(buildingList.get(i).getNumber())
-						)
-				);
-		System.out.println(buildingList.get(i).getLatitud());
-		i++;
+		buildingTextOverlay = new ItemizedTextOverlay(textMarker,
+				MainActivity.this, 13);
+		int i = 0;
+
+		while (i < buildingList.size()) {
+			buildingTextOverlay.addItem(new OverlayItem(new GeoPoint(
+					buildingList.get(i).getLongitud(), buildingList.get(i)
+							.getLatitud()), buildingList.get(i).getName(),
+					String.valueOf(buildingList.get(i).getNumber())));
+			System.out.println(buildingList.get(i).getLatitud());
+			i++;
 		}
-		
+
 		unMapOverlayList.add(buildingTextOverlay);
-		//Calculate location between 2 geopoints (TEST!!!)
-//		float[] distance;
-//		Location.distanceBetween((float)(boundRectTopLeft.getLatitudeE6()/1E6), (float)(boundRectTopLeft.getLongitudeE6()/1E6),
-//				(float)(boundRectBottomRight.getLatitudeE6()/1E6), (float)(boundRectBottomRight.getLongitudeE6()/1E6), distance);
-//		
+		// Calculate location between 2 geopoints (TEST!!!)
+		// float[] distance;
+		// Location.distanceBetween((float)(boundRectTopLeft.getLatitudeE6()/1E6),
+		// (float)(boundRectTopLeft.getLongitudeE6()/1E6),
+		// (float)(boundRectBottomRight.getLatitudeE6()/1E6),
+		// (float)(boundRectBottomRight.getLongitudeE6()/1E6), distance);
+		//
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.activity_main, menu);
