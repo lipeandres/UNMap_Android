@@ -1,12 +1,13 @@
 package com.example.balloontest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Application;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +32,9 @@ public class MainActivity extends MapActivity {
 	public static final int UN_RECT_BOUNDING_W = 4644974;
 	public static final int UN_RECT_BOUNDING_S = -74079201;
 	public static final int UN_BASE_ZOOM = 17;
+	private DBHelper buildingDB; 
 
-	MapView unMap;
+	CustomMapView unMap;
 	List<Overlay> unMapOverlayList;
 	BitmapOverlay buildingsOverlay;
 	Bitmap buildingsImage;
@@ -52,7 +54,7 @@ public class MainActivity extends MapActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// Assigning map to layout
-		unMap = (MapView) findViewById(R.id.mapViewMain);
+		unMap = (CustomMapView) findViewById(R.id.mapViewMain);
 		// Obtain the existing (default) map overlays
 		unMapOverlayList = unMap.getOverlays();
 		unMap.setBuiltInZoomControls(true);
@@ -67,6 +69,7 @@ public class MainActivity extends MapActivity {
 		// the map is animated to be in the correct location and zoom
 		unMapController.animateTo(baseLocation);
 		unMapController.setZoom(UN_BASE_ZOOM);
+		
 
 
 		// --Create a bitmap overlay that will contain the buildings--
@@ -104,14 +107,22 @@ public class MainActivity extends MapActivity {
 						Toast.LENGTH_SHORT).show();
 			}
 		});
-
+		
+		//--Obtain the building list and information from the database
+		buildingDB = new DBHelper(MainActivity.this);
+		buildingDB.open();
+		ArrayList<Building> buildingList = new ArrayList<Building>();
+		buildingList = (ArrayList<Building>) buildingDB.getBuildings();
+		//Since the DB is static we can close it now
+		buildingDB.close();
+		
 		//Calculate location between 2 geopoints (TEST!!!)
 		float[] distance;
 //		Location.distanceBetween((float)(boundRectTopLeft.getLatitudeE6()/1E6), (float)(boundRectTopLeft.getLongitudeE6()/1E6),
 //				(float)(boundRectBottomRight.getLatitudeE6()/1E6), (float)(boundRectBottomRight.getLongitudeE6()/1E6), distance);
 //		
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.activity_main, menu);

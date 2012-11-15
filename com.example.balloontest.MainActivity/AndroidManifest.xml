@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <uses-library android:name="com.google.android.maps"/>
-        <!-- <activity
+        <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
@@ -20,8 +20,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> -->
-        <activity
+        </activity>
+        <!-- <activity
             android:name=".prueba"
             android:label="@string/title_activity_main" >
             <intent-filter>
@@ -29,7 +29,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-        </activity>
+        </activity> -->
         <activity
             android:name=".InformationActivity"
             android:label="@string/title_informationactivity">
