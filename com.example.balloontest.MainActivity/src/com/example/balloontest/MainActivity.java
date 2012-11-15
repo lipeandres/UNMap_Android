@@ -37,7 +37,11 @@ public class MainActivity extends MapActivity {
 	CustomMapView unMap;
 	List<Overlay> unMapOverlayList;
 	BitmapOverlay buildingsOverlay;
+	BitmapOverlay roadsOverlay;
+	BitmapOverlay pedestrianOverlay;
 	Bitmap buildingsImage;
+	Bitmap roadsImage;
+	Bitmap pedestrianImage;
 	protected GeoPoint baseLocation;
 	MapController unMapController;
 	GeoPoint boundRectTopLeft;
@@ -73,11 +77,11 @@ public class MainActivity extends MapActivity {
 		
 
 
-		// --Create a bitmap overlay that will contain the buildings--
+		// --Create a bitmap overlay that will contain the pedestrianPaths--
 		// First we get the image from the resources
 		Resources res = getResources();
-		buildingsImage = BitmapFactory
-				.decodeResource(res, R.drawable.unmaptest);
+		pedestrianImage = BitmapFactory
+				.decodeResource(res, R.drawable.pedestrian_overlay);
 		// We set the geopoints that indicate the top left and bottom right
 		// corner of the desired containing rectangle area,
 		// since this overlay is not intended to change its position static
@@ -85,6 +89,22 @@ public class MainActivity extends MapActivity {
 		boundRectTopLeft = new GeoPoint(UN_RECT_BOUNDING_W, UN_RECT_BOUNDING_N);
 		boundRectBottomRight = new GeoPoint(UN_RECT_BOUNDING_E,
 				UN_RECT_BOUNDING_S);
+		pedestrianOverlay = new BitmapOverlay(pedestrianImage, boundRectTopLeft,
+				boundRectBottomRight);
+		// Once the bitmap overlay is set we add it to the overlay list
+		unMapOverlayList.add(pedestrianOverlay);
+		
+		// --Create a bitmap overlay that will contain the roads overlay--
+		roadsImage = BitmapFactory
+				.decodeResource(res, R.drawable.road_overlay);
+		roadsOverlay = new BitmapOverlay(roadsImage, boundRectTopLeft,
+				boundRectBottomRight);
+		// Once the bitmap overlay is set we add it to the overlay list
+		unMapOverlayList.add(roadsOverlay);
+		
+		// --Create a bitmap overlay that will contain the roads buildings--
+		buildingsImage = BitmapFactory
+				.decodeResource(res, R.drawable.building_overlay);
 		buildingsOverlay = new BitmapOverlay(buildingsImage, boundRectTopLeft,
 				boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
