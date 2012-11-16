@@ -3,7 +3,9 @@ package com.example.balloontest;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,6 +64,7 @@ public class MainActivity extends MapActivity implements TextWatcher {
 	private int group1Id = 1;
 	ImageButton searchBuildingButton;
 	ImageButton layersButton;
+	ImageButton informationButton;
 	ItemizedTextOverlay buildingTextOverlay;
 	Drawable textMarker;
 	AutoCompleteTextView searchBoxView;
@@ -80,7 +83,7 @@ public class MainActivity extends MapActivity implements TextWatcher {
 		unMap = (CustomMapView) findViewById(R.id.mapViewMain);
 		// Obtain the existing (default) map overlays
 		unMapOverlayList = unMap.getOverlays();
-		unMap.setBuiltInZoomControls(true);
+		//unMap.setBuiltInZoomControls(true);
 
 		// --Setting up the map
 		// Set the center and zoom of the map to show the complete extension of
@@ -243,6 +246,22 @@ public class MainActivity extends MapActivity implements TextWatcher {
 
 			public void onClick(View v) {
 				openOptionsMenu();
+			}
+		});
+		
+		//Setting up the information button
+		informationButton= (ImageButton) findViewById(R.id.information_button);
+		informationButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+            	alertDialog.setTitle("Acerca de UNMap");
+            	alertDialog.setMessage("Creado por Felipe Navarro ,\nSandra Castellanos y \nFracisco Cuevas\nUniversidad Nacional de Colombia - 2012");
+            	alertDialog.setButton("Aceptar", new DialogInterface.OnClickListener() {
+            	   public void onClick(DialogInterface dialog, int which) {
+            	      // here you can add functions
+            	   }
+            	});
+            	alertDialog.show();
 			}
 		});
 	}
