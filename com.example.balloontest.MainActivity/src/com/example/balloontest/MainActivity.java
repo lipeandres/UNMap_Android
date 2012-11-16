@@ -83,7 +83,7 @@ public class MainActivity extends MapActivity implements TextWatcher {
 		unMap = (CustomMapView) findViewById(R.id.mapViewMain);
 		// Obtain the existing (default) map overlays
 		unMapOverlayList = unMap.getOverlays();
-		//unMap.setBuiltInZoomControls(true);
+		// unMap.setBuiltInZoomControls(true);
 
 		// --Setting up the map
 		// Set the center and zoom of the map to show the complete extension of
@@ -248,20 +248,24 @@ public class MainActivity extends MapActivity implements TextWatcher {
 				openOptionsMenu();
 			}
 		});
-		
-		//Setting up the information button
-		informationButton= (ImageButton) findViewById(R.id.information_button);
+
+		// Setting up the information button
+		informationButton = (ImageButton) findViewById(R.id.information_button);
 		informationButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
-            	alertDialog.setTitle("Acerca de UNMap");
-            	alertDialog.setMessage("Creado por Felipe Navarro ,\nSandra Castellanos y \nFracisco Cuevas\nUniversidad Nacional de Colombia - 2012");
-            	alertDialog.setButton("Aceptar", new DialogInterface.OnClickListener() {
-            	   public void onClick(DialogInterface dialog, int which) {
-            	      // here you can add functions
-            	   }
-            	});
-            	alertDialog.show();
+				AlertDialog alertDialog = new AlertDialog.Builder(v
+						.getContext()).create();
+				alertDialog.setTitle("Acerca de UNMap");
+				alertDialog
+						.setMessage("Creado por Felipe Navarro ,\nSandra Castellanos y \nFracisco Cuevas\nUniversidad Nacional de Colombia - 2012");
+				alertDialog.setButton("Aceptar",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// here you can add functions
+							}
+						});
+				alertDialog.show();
 			}
 		});
 	}
