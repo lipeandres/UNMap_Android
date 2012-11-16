@@ -80,8 +80,27 @@ public class MainActivity extends MapActivity {
 		// --Create a bitmap overlay that will contain the pedestrianPaths--
 		// First we get the image from the resources
 		Resources res = getResources();
-		pedestrianImage = BitmapFactory.decodeResource(res,
-				R.drawable.pedestrian_overlay);
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize = 0;
+		//Some devices seem to have very little ram, so the images must 
+		//be downsampled to make the system able to run normally, but in 
+		//lower resolution 
+		while ((pedestrianImage == null | buildingsImage == null
+				| roadsImage == null) & options.inSampleSize<10) {
+			try {
+				pedestrianImage = BitmapFactory.decodeResource(res,
+						R.drawable.pedestrian_overlay, options);
+				roadsImage = BitmapFactory.decodeResource(res,
+						R.drawable.road_overlay, options);
+				buildingsImage = BitmapFactory.decodeResource(res,
+						R.drawable.building_overlay, options);
+			} catch (OutOfMemoryError e) {
+				e.printStackTrace();
+			}
+			options.inSampleSize+=1;
+			System.out.println(options.inSampleSize);
+		}
+		
 		// We set the geopoints that indicate the top left and bottom right
 		// corner of the desired containing rectangle area,
 		// since this overlay is not intended to change its position static
@@ -95,25 +114,20 @@ public class MainActivity extends MapActivity {
 		unMapOverlayList.add(pedestrianOverlay);
 
 		// --Create a bitmap overlay that will contain the roads overlay--
-		roadsImage = BitmapFactory.decodeResource(res, R.drawable.road_overlay);
+
 		roadsOverlay = new BitmapOverlay(roadsImage, boundRectTopLeft,
 				boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(roadsOverlay);
 
 		// --Create a bitmap overlay that will contain the roads buildings--
-		buildingsImage = BitmapFactory.decodeResource(res,
-				R.drawable.building_overlay);
 		buildingsOverlay = new BitmapOverlay(buildingsImage, boundRectTopLeft,
 				boundRectBottomRight);
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
 
-
-		// --Create user location tracking overlay
-		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
-		unMapOverlayList.add(userPositionOverlay);
-
+		// //Release bitmap memory
+		// clearBitmap(buildingsImage);
 		// --Setting up the search button
 		searchBuildingButton = (ImageButton) findViewById(R.id.building_search_button);
 		searchBuildingButton.setOnClickListener(new OnClickListener() {
@@ -146,23 +160,30 @@ public class MainActivity extends MapActivity {
 					String.valueOf(buildingList.get(i).getNumber())));
 			System.out.println(buildingList.get(i).getLatitud());
 			i++;
-			
+
 		}
 
 		unMapOverlayList.add(buildingTextOverlay);
-		
+
 		// --Test input overlay
-		touchOverlay = new CustomTouchInputOverlay(unMap,buildingList);
-		unMapOverlayList.add(touchOverlay);	
+		touchOverlay = new CustomTouchInputOverlay(unMap, buildingList);
+		unMapOverlayList.add(touchOverlay);
+
+		// --Create user location tracking overlay
+		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
+		unMapOverlayList.add(userPositionOverlay);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.activity_main, menu);
 		menu.add(group1Id, toggleView, toggleView, "Cambiar Vista");
-		menu.add(group1Id, toggleBuildingOverlay, toggleBuildingOverlay, "Edificios");
-		menu.add(group1Id, toggleRoadOverlay,toggleRoadOverlay, "Rutas Vehiculares");
-		menu.add(group1Id, togglePedestrianOverlay, togglePedestrianOverlay, "Caminos Peatonales");
+		menu.add(group1Id, toggleBuildingOverlay, toggleBuildingOverlay,
+				"Edificios");
+		menu.add(group1Id, toggleRoadOverlay, toggleRoadOverlay,
+				"Rutas Vehiculares");
+		menu.add(group1Id, togglePedestrianOverlay, togglePedestrianOverlay,
+				"Caminos Peatonales");
 		return true;
 	}
 
@@ -193,9 +214,8 @@ public class MainActivity extends MapActivity {
 				buildingsOverlay.toggleVisibility();
 				unMap.invalidate();
 			} else {
-				Toast.makeText(MainActivity.this,
-						"Capa de edificios activada", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(MainActivity.this, "Capa de edificios activada",
+						Toast.LENGTH_SHORT).show();
 				buildingsOverlay.toggleVisibility();
 				unMap.invalidate();
 			}
@@ -203,14 +223,14 @@ public class MainActivity extends MapActivity {
 		case 3:
 			if (roadsOverlay.isVisible()) {
 				Toast.makeText(MainActivity.this,
-						"Capa de rutas vehiculares desactivada", Toast.LENGTH_SHORT)
-						.show();
+						"Capa de rutas vehiculares desactivada",
+						Toast.LENGTH_SHORT).show();
 				roadsOverlay.toggleVisibility();
 				unMap.invalidate();
 			} else {
 				Toast.makeText(MainActivity.this,
-						"Capa de rutas vehiculares activada", Toast.LENGTH_SHORT)
-						.show();
+						"Capa de rutas vehiculares activada",
+						Toast.LENGTH_SHORT).show();
 				roadsOverlay.toggleVisibility();
 				unMap.invalidate();
 			}
@@ -218,14 +238,14 @@ public class MainActivity extends MapActivity {
 		case 4:
 			if (pedestrianOverlay.isVisible()) {
 				Toast.makeText(MainActivity.this,
-						"Capa de caminos peatonales desactivada", Toast.LENGTH_SHORT)
-						.show();
+						"Capa de caminos peatonales desactivada",
+						Toast.LENGTH_SHORT).show();
 				pedestrianOverlay.toggleVisibility();
 				unMap.invalidate();
 			} else {
 				Toast.makeText(MainActivity.this,
-						"Capa de caminos peatonales activada", Toast.LENGTH_SHORT)
-						.show();
+						"Capa de caminos peatonales activada",
+						Toast.LENGTH_SHORT).show();
 				pedestrianOverlay.toggleVisibility();
 				unMap.invalidate();
 			}
@@ -256,6 +276,16 @@ public class MainActivity extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public static void clearBitmap(Bitmap bm) {
+		bm.recycle();
+		// revised 08/15/2010. As a commenter astutely pointed out, bm is not a
+		// passed reference.
+		// To free the memory associated with this bitmap (as intended),
+		// bm should be set to null in the caller.
+		// bm = null;
+		System.gc();
 	}
 
 }

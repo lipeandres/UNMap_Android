@@ -72,7 +72,7 @@ public class CustomTouchInputOverlay extends Overlay {
 			}
 		}
 		// If the press was long enough, show balloon
-		if (stop - start > 150) {
+		if (stop - start > 50) {
 			//Get the nearest building to the touch calculating the distance to each one
 			//we use Location.distanceTo() which receives Location objects, in this case created
 			//with the help of the existing geopoints
