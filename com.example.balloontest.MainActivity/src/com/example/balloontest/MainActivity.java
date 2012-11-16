@@ -3,15 +3,23 @@ package com.example.balloontest;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -22,7 +30,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class MainActivity extends MapActivity {
+public class MainActivity extends MapActivity implements TextWatcher {
 
 	public static final int UN_CENTER_LATITUDE = 4636761;
 	public static final int UN_CENTER_LONGITUDE = -74083450;
@@ -55,7 +63,13 @@ public class MainActivity extends MapActivity {
 	ImageButton searchBuildingButton;
 	ItemizedTextOverlay buildingTextOverlay;
 	Drawable textMarker;
-
+	AutoCompleteTextView searchBoxView;
+	ArrayAdapter<String> buildingNameNumberAdapter;
+	ArrayList<String> buildingNameNumber;
+	String searchResult;
+	ArrayList<Building> buildingList;
+	SimpleItemizedOverlay buildingBalloon;
+	InputMethodManager imm;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,16 +92,17 @@ public class MainActivity extends MapActivity {
 		unMapController.setZoom(UN_BASE_ZOOM);
 		
 
+
 		// --Create a bitmap overlay that will contain the pedestrianPaths--
 		// First we get the image from the resources
 		Resources res = getResources();
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = 0;
-		//Some devices seem to have very little ram, so the images must 
-		//be downsampled to make the system able to run normally, but in 
-		//lower resolution 
-		while ((pedestrianImage == null | buildingsImage == null
-				| roadsImage == null) & options.inSampleSize<10) {
+		// Some devices seem to have very little ram, so the images must
+		// be downsampled to make the system able to run normally, but in
+		// lower resolution
+		while ((pedestrianImage == null | buildingsImage == null | roadsImage == null)
+				& options.inSampleSize < 10) {
 			try {
 				pedestrianImage = BitmapFactory.decodeResource(res,
 						R.drawable.pedestrian_overlay, options);
@@ -98,10 +113,10 @@ public class MainActivity extends MapActivity {
 			} catch (OutOfMemoryError e) {
 				e.printStackTrace();
 			}
-			options.inSampleSize+=1;
+			options.inSampleSize += 1;
 			System.out.println(options.inSampleSize);
 		}
-		
+
 		// We set the geopoints that indicate the top left and bottom right
 		// corner of the desired containing rectangle area,
 		// since this overlay is not intended to change its position static
@@ -127,27 +142,14 @@ public class MainActivity extends MapActivity {
 		// Once the bitmap overlay is set we add it to the overlay list
 		unMapOverlayList.add(buildingsOverlay);
 
-		// //Release bitmap memory
-		// clearBitmap(buildingsImage);
-		// --Setting up the search button
-		searchBuildingButton = (ImageButton) findViewById(R.id.building_search_button);
-		searchBuildingButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				Toast.makeText(MainActivity.this,
-						"ImageButton (selector) is clicked!",
-						Toast.LENGTH_SHORT).show();
-			}
-		});
-
 		// --Obtain the building list and information from the database
 		buildingDB = new DBHelper(MainActivity.this);
 		buildingDB.open();
-		ArrayList<Building> buildingList = new ArrayList<Building>();
+		buildingList = new ArrayList<Building>();
 		buildingList = (ArrayList<Building>) buildingDB.getBuildings();
 		// Since the DB is static we can close it now
 		buildingDB.close();
-		
+
 		// --Touch input overlay
 		touchOverlay = new CustomTouchInputOverlay(unMap, buildingList);
 		unMapOverlayList.add(touchOverlay);
@@ -157,7 +159,7 @@ public class MainActivity extends MapActivity {
 		buildingTextOverlay = new ItemizedTextOverlay(textMarker,
 				MainActivity.this, 13);
 		int i = 0;
-
+		System.out.println(String.valueOf(buildingList.size()));
 		while (i < buildingList.size()) {
 			buildingTextOverlay.addItem(new OverlayItem(new GeoPoint(
 					buildingList.get(i).getLatitudeE6(), buildingList.get(i)
@@ -165,12 +167,66 @@ public class MainActivity extends MapActivity {
 					String.valueOf(buildingList.get(i).getNumber())));
 			i++;
 		}
-
+		System.out.println(String.valueOf(buildingList.size()));
 		unMapOverlayList.add(buildingTextOverlay);
 
 		// --Create user location tracking overlay
 		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
 		unMapOverlayList.add(userPositionOverlay);
+		// --Setting Autocomplete Search box
+		searchBoxView = (AutoCompleteTextView) findViewById(R.id.searchbox);
+		searchBoxView.addTextChangedListener(this);
+		buildingNameNumber = new ArrayList<String>();
+		System.out.println(String.valueOf(buildingList.size()));
+		i = 0;
+		while (i < buildingList.size()) {
+			buildingNameNumber.add(buildingList.get(i).getName());
+			i++;
+		}
+		System.out.println(buildingNameNumber.get(1));
+		// Setting up the auto search
+		searchBuildingButton = (ImageButton) findViewById(R.id.building_search_button);
+		searchBuildingButton.setEnabled(false);
+		buildingNameNumberAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.select_dialog_item, buildingNameNumber);
+		searchBoxView.setAdapter(buildingNameNumberAdapter);
+		searchBoxView.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> parent, View arg1, int pos,
+					long id) {
+				searchResult = (String) parent.getAdapter().getItem(pos);
+				searchBuildingButton.setEnabled(true);
+			}
+		});
+		
+		// --Setting up the search button
+		searchBuildingButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if (searchResult != null) {
+					int j = 0;
+					Building tempBuilding = new Building();
+					while (!(searchResult.equals(buildingList.get(j).getName()))
+							& j < buildingList.size()) {
+						j++;
+					}
+					if (j <= buildingList.size()) {
+						tempBuilding = buildingList.get(j);
+						touchOverlay.externalBalloon(tempBuilding);
+						searchBoxView.clearListSelection();
+					} else {
+						Toast.makeText(MainActivity.this,
+								"La busqueda no ha tenido resultados",
+								Toast.LENGTH_LONG).show();
+						searchBoxView.clearListSelection();
+					}
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				    mgr.hideSoftInputFromWindow(searchBoxView.getWindowToken(), 0);
+				}
+			}
+		});
+		
+		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	    mgr.hideSoftInputFromWindow(searchBoxView.getWindowToken(), 0);
 	}
 
 	@Override
@@ -277,5 +333,24 @@ public class MainActivity extends MapActivity {
 		return false;
 	}
 
+	public void afterTextChanged(Editable s) {
+
+	}
+
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+
+	}
 
 }

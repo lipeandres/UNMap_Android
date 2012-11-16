@@ -90,21 +90,7 @@ public class CustomTouchInputOverlay extends Overlay {
 					.setLongitude((float) (touchedPoint.getLongitudeE6() / 1E6));
 			int nearestBuildingIndex = getNearestBuildingIndex();
 			nearestBuilding = buildingList.get(nearestBuildingIndex);
-			GeoPoint nearestBuildingPoint = new GeoPoint(
-					nearestBuilding.getLatitudeE6(), nearestBuilding.getLongitudeE6());
-
-			balloonExists = true;
-			buildingMarker = context.getResources().getDrawable(
-					R.drawable.orangemarker);
-			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map,
-					nearestBuilding.getId());
-			buildingBalloon.setShowClose(false);
-			OverlayItem overlayItem = new OverlayItem(nearestBuildingPoint,
-					"Edificio " + String.valueOf(nearestBuilding.getNumber()),
-					nearestBuilding.getName());
-			buildingBalloon.addOverlay(overlayItem);
-			mapOverlayList.add(buildingBalloon);
-			buildingBalloon.setFocus(overlayItem);
+			externalBalloon(nearestBuilding);
 			start=0;
 			stop=0;
 			return true;
@@ -232,5 +218,26 @@ public class CustomTouchInputOverlay extends Overlay {
 		}
 		System.out.println(String.valueOf(nearestBuildingIndex));
 		return nearestBuildingIndex;
+	}
+	public void externalBalloon(Building _building){
+		GeoPoint nearestBuildingPoint = new GeoPoint(
+				_building.getLatitudeE6(), _building.getLongitudeE6());
+		if (balloonExists) {
+			buildingBalloon.hideBalloon();
+			mapOverlayList.remove(buildingBalloon);
+			balloonExists = false;
+		}
+		balloonExists = true;	
+		buildingMarker = context.getResources().getDrawable(
+				R.drawable.orangemarker);
+		buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map,
+				_building.getId());
+		buildingBalloon.setShowClose(false);
+		OverlayItem overlayItem = new OverlayItem(nearestBuildingPoint,
+				"Edificio " + String.valueOf(_building.getNumber()),
+				_building.getName());
+		buildingBalloon.addOverlay(overlayItem);
+		mapOverlayList.add(buildingBalloon);
+		buildingBalloon.setFocus(overlayItem);
 	}
 }

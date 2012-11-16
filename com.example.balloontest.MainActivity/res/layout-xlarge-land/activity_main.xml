@@ -15,19 +15,18 @@
         android:id="@+id/building_search_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/search_button"
         android:scaleType="centerInside"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/search_button"
         android:text="Select" />
-
-    <AutoCompleteTextView
+    <AutoCompleteTextView 
         android:id="@+id/searchbox"
+        android:layout_toRightOf="@id/building_search_button"
         android:layout_width="fill_parent"
         android:layout_height="53dp"
-        android:layout_toRightOf="@id/building_search_button"
         android:background="@drawable/background_search"
         android:textColor="#C8FFFFFF"
-        android:textCursorDrawable="@null" />
-
+        android:textCursorDrawable="@null"
+        />
 </RelativeLayout>
