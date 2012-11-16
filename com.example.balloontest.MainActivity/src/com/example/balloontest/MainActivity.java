@@ -76,6 +76,7 @@ public class MainActivity extends MapActivity {
 		// the map is animated to be in the correct location and zoom
 		unMapController.animateTo(baseLocation);
 		unMapController.setZoom(UN_BASE_ZOOM);
+		
 
 		// --Create a bitmap overlay that will contain the pedestrianPaths--
 		// First we get the image from the resources
@@ -146,6 +147,10 @@ public class MainActivity extends MapActivity {
 		buildingList = (ArrayList<Building>) buildingDB.getBuildings();
 		// Since the DB is static we can close it now
 		buildingDB.close();
+		
+		// --Touch input overlay
+		touchOverlay = new CustomTouchInputOverlay(unMap, buildingList);
+		unMapOverlayList.add(touchOverlay);
 
 		// --Testing text overlay
 		textMarker = (Drawable) res.getDrawable(R.drawable.bluemarker);
@@ -155,19 +160,13 @@ public class MainActivity extends MapActivity {
 
 		while (i < buildingList.size()) {
 			buildingTextOverlay.addItem(new OverlayItem(new GeoPoint(
-					buildingList.get(i).getLatitud(), buildingList.get(i)
-							.getLongitud()), buildingList.get(i).getName(),
+					buildingList.get(i).getLatitudeE6(), buildingList.get(i)
+							.getLongitudeE6()), buildingList.get(i).getName(),
 					String.valueOf(buildingList.get(i).getNumber())));
-			System.out.println(buildingList.get(i).getLatitud());
 			i++;
-
 		}
 
 		unMapOverlayList.add(buildingTextOverlay);
-
-		// --Test input overlay
-		touchOverlay = new CustomTouchInputOverlay(unMap, buildingList);
-		unMapOverlayList.add(touchOverlay);
 
 		// --Create user location tracking overlay
 		userPositionOverlay = new MyLocationOverlay(MainActivity.this, unMap);
@@ -278,14 +277,5 @@ public class MainActivity extends MapActivity {
 		return false;
 	}
 
-	public static void clearBitmap(Bitmap bm) {
-		bm.recycle();
-		// revised 08/15/2010. As a commenter astutely pointed out, bm is not a
-		// passed reference.
-		// To free the memory associated with this bitmap (as intended),
-		// bm should be set to null in the caller.
-		// bm = null;
-		System.gc();
-	}
 
 }

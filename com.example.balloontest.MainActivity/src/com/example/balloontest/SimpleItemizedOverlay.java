@@ -41,6 +41,7 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 	protected boolean onBalloonTap(int index, OverlayItem item) {
 		Intent buildingInfoIntent = new Intent(c,InformationActivity.class);
 		buildingInfoIntent.setClassName("com.example.balloontest", "com.example.balloontest.InformationActivity");
+		System.out.println("Hasta aqui normal, building ID: " + String.valueOf(buildingID));
 		buildingInfoIntent.putExtra("building_id", buildingID);
 		c.startActivity(buildingInfoIntent);
 		return true;

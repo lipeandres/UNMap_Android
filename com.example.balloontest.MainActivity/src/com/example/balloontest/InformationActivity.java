@@ -2,13 +2,18 @@ package com.example.balloontest;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 public class InformationActivity extends Activity{
 	private int buildingID;
 	private DBHelper buildingDB;
 	Building building;
-	TextView title;
+	TextView buildingTitleView;
+	ImageView buildingImageView;
+	TextView buildingInfoView;
 	
 
 	@Override
@@ -20,7 +25,7 @@ public class InformationActivity extends Activity{
 		Bundle extras = getIntent().getExtras();
 		if (extras == null) {
 			return;
-		}	
+		}
 		//Get the building information from the database
 		buildingID = extras.getInt("building_id");
 		// --Obtain the building list and information from the database
@@ -30,8 +35,14 @@ public class InformationActivity extends Activity{
 		// Since the DB is static we can close it now
 		buildingDB.close();
 		//Print the title
-		title = (TextView) findViewById(R.id.infoact_title);
-		title.setText(building.getName());
+		buildingTitleView = (TextView) findViewById(R.id.Building_Name);
+		buildingTitleView.setText(building.getName() + " - " + building.getNumber());
+		//Getting the image to display
+		buildingImageView = (ImageView) findViewById(R.id.Building_Image);
+		UrlImageViewHelper.setUrlDrawable(buildingImageView, "https://dl.dropbox.com/u/1284250/UNMap/test.png", R.drawable.placeholder);
+		//Getting Info
+		buildingInfoView=(TextView) findViewById(R.id.Building_Info);
+		buildingInfoView.setText(building.getInfo());
 	}
 
 }

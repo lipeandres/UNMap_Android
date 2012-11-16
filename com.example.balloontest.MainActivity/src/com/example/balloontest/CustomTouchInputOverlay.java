@@ -16,7 +16,6 @@ import com.google.android.maps.Projection;
 
 public class CustomTouchInputOverlay extends Overlay {
 	private long start, stop;
-	private boolean moved;
 	private int x, y;
 	private GeoPoint touchedPoint;
 	private GeoPoint BoundsTopLeftCorner;
@@ -56,50 +55,70 @@ public class CustomTouchInputOverlay extends Overlay {
 		// when touched, get coordinates and event start time
 		if (e.getAction() == MotionEvent.ACTION_DOWN) {
 			start = e.getEventTime();
-			moved = false;
 			x = (int) e.getX();
 			y = (int) e.getY();
 			touchedPoint = map.getProjection().fromPixels(x, y);
+			System.out.println("Punto tocado(down): " + "X "
+					+ String.valueOf((int)e.getX()) + " Y "
+					+ String.valueOf((int)e.getY()));
 		}
 		// when finger is removed but not moved set event stop time
-		if (e.getAction() == MotionEvent.ACTION_UP && !moved) {
-			stop = e.getEventTime();
-			moved = false;
-			if (balloonExists) {
-				buildingBalloon.hideBalloon();
-				mapOverlayList.remove(buildingBalloon);
-				balloonExists = false;
+		if ((e.getAction() == MotionEvent.ACTION_UP)) {
+			if ((x == (int) e.getX()) & (y == (int)e.getY())) {
+				stop = e.getEventTime();
+				if (balloonExists) {
+					buildingBalloon.hideBalloon();
+					mapOverlayList.remove(buildingBalloon);
+					balloonExists = false;
+				}
+				System.out.println("Punto tocado(up): " + "X "
+						+ String.valueOf((int)e.getX()) + " Y "
+						+ String.valueOf((int)e.getY()));
 			}
 		}
 		// If the press was long enough, show balloon
-		if (stop - start > 50) {
-			//Get the nearest building to the touch calculating the distance to each one
-			//we use Location.distanceTo() which receives Location objects, in this case created
-			//with the help of the existing geopoints
-			touchedLocation.setLatitude((float)(touchedPoint.getLatitudeE6()/1E6));
-			touchedLocation.setLongitude((float)(touchedPoint.getLongitudeE6()/1E6));
+		if (stop - start > 300) {
+			System.out.println("Time " + String.valueOf(stop-start));
+			// Get the nearest building to the touch calculating the distance to
+			// each one
+			// we use Location.distanceTo() which receives Location objects, in
+			// this case created
+			// with the help of the existing geopoints
+			touchedLocation
+					.setLatitude((float) (touchedPoint.getLatitudeE6() / 1E6));
+			touchedLocation
+					.setLongitude((float) (touchedPoint.getLongitudeE6() / 1E6));
 			int nearestBuildingIndex = getNearestBuildingIndex();
 			nearestBuilding = buildingList.get(nearestBuildingIndex);
-			GeoPoint nearestBuildingPoint = new GeoPoint(nearestBuilding.getLatitud(), nearestBuilding.getLongitud());
-			
+			GeoPoint nearestBuildingPoint = new GeoPoint(
+					nearestBuilding.getLatitudeE6(), nearestBuilding.getLongitudeE6());
+
 			balloonExists = true;
 			buildingMarker = context.getResources().getDrawable(
 					R.drawable.orangemarker);
-			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map, nearestBuilding.getId());
+			buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map,
+					nearestBuilding.getId());
 			buildingBalloon.setShowClose(false);
 			OverlayItem overlayItem = new OverlayItem(nearestBuildingPoint,
-					"Edificio "+String.valueOf(nearestBuilding.getNumber()), nearestBuilding.getName());
+					"Edificio " + String.valueOf(nearestBuilding.getNumber()),
+					nearestBuilding.getName());
 			buildingBalloon.addOverlay(overlayItem);
 			mapOverlayList.add(buildingBalloon);
 			buildingBalloon.setFocus(overlayItem);
+			start=0;
+			stop=0;
 			return true;
 		}
 		// if the map moves, don't place marks and place boundaries for the
 		// movement
 		if (e.getAction() == MotionEvent.ACTION_MOVE) {
+			System.out.println("Punto tocado(move): " + "X "
+					+ String.valueOf((int)e.getX()) + " Y "
+					+ String.valueOf((int)e.getY()));
+			if (!((x == (int) e.getX()) & (y == (int)e.getY()))) {
 			start = 0;
 			stop = 0;
-			moved = true;
+			}
 			// (only works for north of equator)
 			// * map right side (lat) can't go past the left (lat) of screen
 
@@ -194,20 +213,20 @@ public class CustomTouchInputOverlay extends Overlay {
 
 	private int getNearestBuildingIndex() {
 		int i = 0;
-		int nearestBuildingIndex=0;
+		int nearestBuildingIndex = 0;
 		Location tempBuildingLocation;
 		tempBuildingLocation = new Location("");
 		float distance = 0;
 		float prev_distance = 9999999;
 		while (i < buildingList.size()) {
 			tempBuildingLocation.setLatitude((double) (buildingList.get(i)
-					.getLatitud() / 1E6));
+					.getLatitudeE6() / 1E6));
 			tempBuildingLocation.setLongitude((double) (buildingList.get(i)
-					.getLongitud() / 1E6));
+					.getLongitudeE6() / 1E6));
 			distance = touchedLocation.distanceTo(tempBuildingLocation);
 			if (distance < prev_distance) {
 				prev_distance = distance;
-				nearestBuildingIndex=i;
+				nearestBuildingIndex = i;
 			}
 			i++;
 		}

@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 
 	//Ruta por defecto de las bases de datos en el sistema Android
 	private static String DB_PATH = "/data/data/com.example.balloontest/databases/";
-	private static String DB_NAME = "un_buildings.db";
+	private static String DB_NAME = "un_map.db";
 	private static String DATABASE_TABLE = "buildings";
 	private SQLiteDatabase db;
 	private final Context context;
@@ -28,12 +28,13 @@ public class DBHelper extends SQLiteOpenHelper{
 	public static final String KEY_ID = "_id";
 	public final static String KEY_NAME = "name";
 	public final static String KEY_NUMBER = "number";
-	public final static String KEY_LONGITUD = "longitud";
-	public final static String KEY_LATITUD = "latitud";
+	public final static String KEY_LONGITUDE = "longitude";
+	public final static String KEY_LATITUDE = "latitude";
+	public final static String KEY_INFO = "info";
 	
 	 
 	//Array de strings para su uso en los diferentes m��todos
-	private static final String[] cols = new String[] { KEY_ID, KEY_NAME, KEY_NUMBER, KEY_LONGITUD, KEY_LATITUD };
+	private static final String[] cols = new String[] { KEY_ID, KEY_NAME, KEY_NUMBER, KEY_LATITUDE, KEY_LONGITUDE,KEY_INFO};
 	 
 	/**
 	* Constructor
@@ -187,12 +188,13 @@ public class DBHelper extends SQLiteOpenHelper{
 	/**
 	* ACTUALIZAR EDIFICIO _id = _rowIndex
 	* */
-	public boolean updateAlarma(Integer _rowIndex, String name, String number, Integer longitud, Integer latitud) {
+	public boolean updateAlarma(Integer _rowIndex, String name, String number, Integer latitude, Integer longitude,String info) {
 	ContentValues newValues = new ContentValues();
 	newValues.put(KEY_NAME, name);
 	newValues.put(KEY_NUMBER, number);
-	newValues.put(KEY_LATITUD, latitud);
-	newValues.put(KEY_LONGITUD, longitud);
+	newValues.put(KEY_LATITUDE, latitude);
+	newValues.put(KEY_LONGITUDE, longitude);
+	newValues.put(KEY_INFO, info);
 	return db.update(DATABASE_TABLE, newValues, KEY_ID + "=" + _rowIndex, null) > 0;
 	}
 	
@@ -202,15 +204,16 @@ public class DBHelper extends SQLiteOpenHelper{
 			null, null);
 			if ((result.getCount() == 0) || !result.moveToFirst()) {
 				//Si el edificio no existe, devuelve un edificio con valores a, a, -1 y -1
-				building = new Building("a","a",-1,-1,-1);
+				building = new Building("-","-",-1,-1,-1,"-");
 			} else {
 				if (result.moveToFirst()) {
 					building = new Building(
 				    result.getString(result.getColumnIndex(KEY_NAME)),
 				    result.getString(result.getColumnIndex(KEY_NUMBER)),
-					result.getInt(result.getColumnIndex(KEY_LATITUD)),
-					result.getInt(result.getColumnIndex(KEY_LONGITUD)),
-					result.getInt(result.getColumnIndex(KEY_ID))
+					result.getInt(result.getColumnIndex(KEY_LATITUDE)),
+					result.getInt(result.getColumnIndex(KEY_LONGITUDE)),
+					result.getInt(result.getColumnIndex(KEY_ID)),
+					result.getString(result.getColumnIndex(KEY_INFO))
 					);
 				}
 			}
@@ -226,9 +229,10 @@ public class DBHelper extends SQLiteOpenHelper{
 			buildings.add(new Building(
 					result.getString(result.getColumnIndex(KEY_NAME)),
 				    result.getString(result.getColumnIndex(KEY_NUMBER)),
-					result.getInt(result.getColumnIndex(KEY_LATITUD)),
-					result.getInt(result.getColumnIndex(KEY_LONGITUD)),
-					result.getInt(result.getColumnIndex(KEY_ID))
+					result.getInt(result.getColumnIndex(KEY_LATITUDE)),
+					result.getInt(result.getColumnIndex(KEY_LONGITUDE)),
+					result.getInt(result.getColumnIndex(KEY_ID)),
+					result.getString(result.getColumnIndex(KEY_INFO))
 					)
 			);
 		} while(result.moveToNext());

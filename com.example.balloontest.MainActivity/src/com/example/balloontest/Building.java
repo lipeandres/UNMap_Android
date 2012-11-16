@@ -7,18 +7,21 @@ public class Building {
 	
 	private String name;
 	private String number;
-	private Integer longitud;
-	private Integer latitud;
+	private Integer longitude;
+	private Integer latitude;
 	private Integer id;
+	private String info;
+
 	
 	
-	public Building(String name, String number, Integer longitud, Integer latitud,Integer id) {
+	public Building(String name, String number, Integer latitude, Integer longitude,Integer id,String info) {
 		super();
 		this.name=name;
 		this.number=number;
-		this.longitud=longitud;
-		this.latitud=latitud;
+		this.longitude=longitude;
+		this.latitude=latitude;
 		this.id=id;
+		this.info=info;
 		}
 	
 	public Building() {
@@ -36,11 +39,19 @@ public class Building {
 	public String getNumber() {
 	return number;
 	}
-	public int getLongitud() {
-	return longitud;
+	public int getLongitudeE6() {
+	return longitude;
 	}
-	public int getLatitud() {
-		return latitud;
+	public int getLatitudeE6() {
+		return latitude;
+		}
+	
+	public String getInfo() {
+		return info;
+		}
+
+	public String getImgUrl() {
+		return "https://dl.dropbox.com/u/1284250/UNMap/" + "id"+"png";
 		}
 
 }

@@ -16,7 +16,8 @@
         <uses-library android:name="com.google.android.maps"/>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main" 
+            android:configChanges="keyboardHidden|orientation"   >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +35,8 @@
         </activity> -->
         <activity
             android:name=".InformationActivity"
-            android:label="@string/title_informationactivity">
+            android:label="@string/title_informationactivity"
+            android:configChanges="keyboardHidden|orientation"  >
         </activity>
     </application>
     
