@@ -77,7 +77,7 @@ public class CustomTouchInputOverlay extends Overlay {
 			}
 		}
 		// If the press was long enough, show balloon
-		if (stop - start > 300) {
+		if (stop - start > 150) {
 			System.out.println("Time " + String.valueOf(stop-start));
 			// Get the nearest building to the touch calculating the distance to
 			// each one
@@ -233,11 +233,13 @@ public class CustomTouchInputOverlay extends Overlay {
 		buildingBalloon = new SimpleItemizedOverlay(buildingMarker, map,
 				_building.getId());
 		buildingBalloon.setShowClose(false);
+		buildingBalloon.setShowDisclosure(true);
 		OverlayItem overlayItem = new OverlayItem(nearestBuildingPoint,
-				"Edificio " + String.valueOf(_building.getNumber()),
-				_building.getName());
+				String.valueOf(_building.getName()),
+				"Edificio " + _building.getNumber());
 		buildingBalloon.addOverlay(overlayItem);
 		mapOverlayList.add(buildingBalloon);
 		buildingBalloon.setFocus(overlayItem);
+		map.getController().animateTo(nearestBuildingPoint);
 	}
 }

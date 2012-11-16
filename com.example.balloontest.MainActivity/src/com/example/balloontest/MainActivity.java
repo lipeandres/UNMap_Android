@@ -61,6 +61,7 @@ public class MainActivity extends MapActivity implements TextWatcher {
 	int togglePedestrianOverlay = Menu.FIRST + 3;
 	private int group1Id = 1;
 	ImageButton searchBuildingButton;
+	ImageButton layersButton;
 	ItemizedTextOverlay buildingTextOverlay;
 	Drawable textMarker;
 	AutoCompleteTextView searchBoxView;
@@ -70,6 +71,7 @@ public class MainActivity extends MapActivity implements TextWatcher {
 	ArrayList<Building> buildingList;
 	SimpleItemizedOverlay buildingBalloon;
 	InputMethodManager imm;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,8 +92,6 @@ public class MainActivity extends MapActivity implements TextWatcher {
 		// the map is animated to be in the correct location and zoom
 		unMapController.animateTo(baseLocation);
 		unMapController.setZoom(UN_BASE_ZOOM);
-		
-
 
 		// --Create a bitmap overlay that will contain the pedestrianPaths--
 		// First we get the image from the resources
@@ -195,14 +195,17 @@ public class MainActivity extends MapActivity implements TextWatcher {
 			public void onItemClick(AdapterView<?> parent, View arg1, int pos,
 					long id) {
 				searchResult = (String) parent.getAdapter().getItem(pos);
+				searchBoxView.clearFocus();
+				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				mgr.hideSoftInputFromWindow(searchBoxView.getWindowToken(), 0);
 				searchBuildingButton.setEnabled(true);
 			}
 		});
-		
+
 		// --Setting up the search button
 		searchBuildingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (searchResult != null) {
+				if (!(searchResult.equals(""))) {
 					int j = 0;
 					Building tempBuilding = new Building();
 					while (!(searchResult.equals(buildingList.get(j).getName()))
@@ -212,21 +215,36 @@ public class MainActivity extends MapActivity implements TextWatcher {
 					if (j <= buildingList.size()) {
 						tempBuilding = buildingList.get(j);
 						touchOverlay.externalBalloon(tempBuilding);
-						searchBoxView.clearListSelection();
+						searchBoxView.clearFocus();
+						searchBoxView.setText("");
+						searchBuildingButton.setEnabled(false);
 					} else {
 						Toast.makeText(MainActivity.this,
 								"La busqueda no ha tenido resultados",
 								Toast.LENGTH_LONG).show();
 						searchBoxView.clearListSelection();
+						searchBoxView.setText("");
+						searchBuildingButton.setEnabled(false);
 					}
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				    mgr.hideSoftInputFromWindow(searchBoxView.getWindowToken(), 0);
+					mgr.hideSoftInputFromWindow(searchBoxView.getWindowToken(),
+							0);
+					searchBoxView.setText("");
 				}
 			}
 		});
-		
+		searchBoxView.clearFocus();
 		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-	    mgr.hideSoftInputFromWindow(searchBoxView.getWindowToken(), 0);
+		mgr.hideSoftInputFromWindow(searchBoxView.getWindowToken(), 0);
+
+		// Setting up the layers button
+		layersButton = (ImageButton) findViewById(R.id.layer_selection_button);
+		layersButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				openOptionsMenu();
+			}
+		});
 	}
 
 	@Override

@@ -29,4 +29,12 @@
         android:textColor="#C8FFFFFF"
         android:textCursorDrawable="@null"
         />
+         <ImageButton
+        android:id="@+id/layer_selection_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerInside"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/layers_button"/>
 </RelativeLayout>
