@@ -39,7 +39,7 @@ public class InformationActivity extends Activity{
 		buildingTitleView.setText(building.getName() + " - " + building.getNumber());
 		//Getting the image to display
 		buildingImageView = (ImageView) findViewById(R.id.Building_Image);
-		UrlImageViewHelper.setUrlDrawable(buildingImageView, "https://dl.dropbox.com/u/1284250/UNMap/test.png", R.drawable.placeholder);
+		UrlImageViewHelper.setUrlDrawable(buildingImageView, "https://dl.dropbox.com/u/1284250/UNMap/201 derecho.jpg", R.drawable.placeholder);
 		//Getting Info
 		buildingInfoView=(TextView) findViewById(R.id.Building_Info);
 		buildingInfoView.setText(building.getInfo());
