@@ -50,8 +50,5 @@ public class Building {
 		return info;
 		}
 
-	public String getImgUrl() {
-		return "https://dl.dropbox.com/u/1284250/UNMap/" + "id"+"png";
-		}
 
 }

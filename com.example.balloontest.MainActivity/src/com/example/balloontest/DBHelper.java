@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 
 	//Ruta por defecto de las bases de datos en el sistema Android
 	private static String DB_PATH = "/data/data/com.example.balloontest/databases/";
-	private static String DB_NAME = "un_map.db";
+	private static String DB_NAME = "latest.db";
 	private static String DATABASE_TABLE = "buildings";
 	private SQLiteDatabase db;
 	private final Context context;

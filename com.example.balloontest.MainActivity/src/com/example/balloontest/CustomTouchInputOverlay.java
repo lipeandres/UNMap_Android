@@ -77,7 +77,7 @@ public class CustomTouchInputOverlay extends Overlay {
 			}
 		}
 		// If the press was long enough, show balloon
-		if (stop - start > 150) {
+		if (stop - start > 80) {
 			System.out.println("Time " + String.valueOf(stop-start));
 			// Get the nearest building to the touch calculating the distance to
 			// each one

@@ -34,15 +34,18 @@ public class InformationActivity extends Activity{
 		building = (Building) buildingDB.getBuilding(buildingID);
 		// Since the DB is static we can close it now
 		buildingDB.close();
+		//Getting Info
+		buildingInfoView=(TextView) findViewById(R.id.Building_Info);
+		String info = building.getInfo();
+		System.out.println(info);
+		buildingInfoView.setText(info);
 		//Print the title
 		buildingTitleView = (TextView) findViewById(R.id.Building_Name);
 		buildingTitleView.setText(building.getName() + " - " + building.getNumber());
 		//Getting the image to display
 		buildingImageView = (ImageView) findViewById(R.id.Building_Image);
-		UrlImageViewHelper.setUrlDrawable(buildingImageView, "https://dl.dropbox.com/u/1284250/UNMap/201 derecho.jpg", R.drawable.placeholder);
-		//Getting Info
-		buildingInfoView=(TextView) findViewById(R.id.Building_Info);
-		buildingInfoView.setText(building.getInfo());
+		UrlImageViewHelper.setUrlDrawable(buildingImageView, "https://dl.dropbox.com/u/1284250/UNMap/"+String.valueOf(building.getId())+".JPG", R.drawable.placeholder);
+		System.out.println("https://dl.dropbox.com/u/1284250/UNMap/"+String.valueOf(building.getId())+".JPG");
 	}
 
 }
