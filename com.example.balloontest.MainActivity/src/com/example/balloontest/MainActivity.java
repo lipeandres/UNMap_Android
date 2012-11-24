@@ -100,7 +100,7 @@ public class MainActivity extends MapActivity implements TextWatcher {
 		// First we get the image from the resources
 		Resources res = getResources();
 		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize = 0;
+		options.inSampleSize = 2;
 		// Some devices seem to have very little ram, so the images must
 		// be downsampled to make the system able to run normally, but in
 		// lower resolution

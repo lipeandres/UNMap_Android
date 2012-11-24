@@ -21,15 +21,16 @@
         android:scaleType="centerInside"
         android:text="Select" />
 
-    <AutoCompleteTextView
+    <AutoCompleteTextView 
         android:id="@+id/searchbox"
+        android:layout_toRightOf="@id/building_search_button"
         android:layout_width="fill_parent"
         android:layout_height="53dp"
-        android:layout_toRightOf="@id/building_search_button"
+        android:singleLine="true"
         android:background="@drawable/background_search"
         android:textColor="#C8FFFFFF"
-        android:textCursorDrawable="@null" />
-
+        android:textCursorDrawable="@null"
+        />
          <ImageButton
              android:id="@+id/layer_selection_button"
              android:layout_width="60dp"
