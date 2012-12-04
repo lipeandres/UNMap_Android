@@ -257,7 +257,7 @@ public class MainActivity extends MapActivity implements TextWatcher {
 						.getContext()).create();
 				alertDialog.setTitle("Acerca de UNMap");
 				alertDialog
-						.setMessage("Creado por Felipe Navarro fanavarrom@unal.edu.co,\nSandra Castellanos smcastellanosp@unal.edu.co y \nFracisco Cuevas fjcuevass@unal.edu.co \nUniversidad Nacional de Colombia - 2012");
+						.setMessage("Creado por Felipe Navarro fanavarrom@unal.edu.co,\nSandra Castellanos smcastellanosp@unal.edu.co y \nFrancisco Cuevas fjcuevass@unal.edu.co \nUniversidad Nacional de Colombia - 2012");
 				alertDialog.setButton("Aceptar",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
